@@ -77,6 +77,19 @@
             transition: opacity 0.3s ease;
         }
 
+        /* Texture and Flare Effects */
+        .noise-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 128px 128px; /* Prevents stretching, keeping noise crisp */
+            mix-blend-mode: overlay;
+        }
+        
+        .light-flare {
+            background: radial-gradient(circle at 0% 0%, rgba(166, 193, 255, 0.25) 0%, rgba(92, 128, 255, 0.08) 30%, transparent 60%);
+            mix-blend-mode: screen;
+        }
+
         /* 3D Input Fields */
         .input-3d {
             background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(25,25,25,0.3) 100%);
@@ -114,28 +127,38 @@
             <div id="glow-border" class="absolute inset-0 opacity-40 group-hover:opacity-100 pointer-events-none"></div>
             
             <!-- Glassmorphic Inner Card -->
-            <div class="relative bg-black/60 backdrop-blur-2xl rounded-[23px] h-full w-full p-8 md:p-10 border border-white/5 z-10">
+            <div class="relative bg-black/60 backdrop-blur-2xl rounded-[23px] h-full w-full p-8 md:p-10 border border-white/5 z-10 overflow-hidden">
                 
-                <!-- Header -->
-                <div class="text-center mb-10 form-element">
-                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent/10 border border-accent/20 mb-4 shadow-[0_0_15px_rgba(92,128,255,0.3)]">
-                        <i class="fa-solid fa-robot text-accent text-xl"></i>
-                    </div>
-                    <h2 class="font-display text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#a6c1ff] via-[#5c80ff] to-[#2541b3]">TRACK VERSE</h2>
-                    <p class="text-white/50 text-sm tracking-widest uppercase mt-1">Official Registration Portal</p>
-                </div>
+                <!-- Texture & Flare Overlays -->
+                <div class="absolute inset-0 pointer-events-none noise-texture opacity-30 z-0"></div>
+                <div class="absolute inset-0 pointer-events-none light-flare z-0"></div>
 
-                <!-- Form -->
-                <form id="trackverse-reg" class="space-y-6">
+                <!-- Main Content Wrapper (Ensures content stays above effects) -->
+                <div class="relative z-10">
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Header -->
+                    <div class="text-center mb-10 form-element flex flex-col items-center">
                         
-                        <!-- Team Name -->
-                        <div class="relative form-element md:col-span-2">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-solid fa-user-astronaut text-white/40"></i>
-                            </div>
-                            <input type="text" id="teamName" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30" placeholder="Team Name">
+                        <!-- Track Verse Custom Logo -->
+                        <img 
+                            src="./Untitled204_20260327225805.jpg" 
+                            alt="Track Verse Official Logo" 
+                            class="h-28 md:h-36 mb-4 object-contain mix-blend-screen drop-shadow-[0_0_20px_rgba(92,128,255,0.4)]"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+                        <!-- Fallback message if image is not in the same folder -->
+                        <p class="hidden text-xs text-red-400 mb-4 border border-red-400/30 bg-red-400/10 p-2 rounded">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Logo image not found in current folder
+                        </p>
+
+                        <h2 class="font-display text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#a6c1ff] via-[#5c80ff] to-[#2541b3]">TRACK VERSE</h2>
+                        <p class="text-white/50 text-sm tracking-widest uppercase mt-1">Official Registration Portal</p>
+                    </div>
+
+                    <!-- Form -->
+                    <form id="trackverse-reg" class="space-y-6">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         </div>
 
                         <!-- Contact Number -->
@@ -240,29 +263,29 @@
 
                         </div>
                     </div>
+                        <!-- Footer Action Area -->
+                        <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 form-element">
+                            
+                            <!-- Fee Display -->
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                                    <i class="fa-solid fa-ticket text-white/60"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-white/50 uppercase tracking-widest">Entry Fee</p>
+                                    <p class="font-display text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A6C4FF] to-[#5C8DF6]">₹200 <span class="text-sm font-normal text-white/40 font-sans">/team</span></p>
+                                </div>
+                            </div>
 
-                    <!-- Footer Action Area -->
-                    <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 form-element">
-                        
-                        <!-- Fee Display -->
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                                <i class="fa-solid fa-ticket text-white/60"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-white/50 uppercase tracking-widest">Entry Fee</p>
-                                <p class="font-display text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A6C4FF] to-[#5C8DF6]">₹200 <span class="text-sm font-normal text-white/40 font-sans">/team</span></p>
-                            </div>
+                            <!-- Submit Button -->
+                            <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-[#5C8DF6] to-[#2B57C4] text-white font-display font-bold px-8 py-4 rounded-xl hover:shadow-[0_0_25px_rgba(92,141,246,0.5)] transition-all duration-300 flex items-center justify-center gap-3 group">
+                                <span>SECURE MY SPOT</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
                         </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-[#5C8DF6] to-[#2B57C4] text-white font-display font-bold px-8 py-4 rounded-xl hover:shadow-[0_0_25px_rgba(92,141,246,0.5)] transition-all duration-300 flex items-center justify-center gap-3 group">
-                            <span>SECURE MY SPOT</span>
-                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </button>
-
-                    </div>
-                </form>
+                    </form>
+                </div> <!-- End Main Content Wrapper -->
             </div>
         </div>
     </div>
