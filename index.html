@@ -41,20 +41,19 @@
                 radial-gradient(circle at 100% 100%, rgba(60, 30, 150, 0.15), transparent 40%);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            padding-bottom: 4rem;
         }
 
-        /* Custom Dropdown Styling */
+        /* Custom Dropdown Styling for Dark Mode */
         select option {
             background-color: #0a0a0a;
             color: #fff;
         }
 
-        /* Input Autocomplete override */
+        /* Input Autocomplete override for WebKit */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
@@ -78,7 +77,7 @@
         .noise-texture {
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             background-repeat: repeat;
-            background-size: 128px 128px;
+            background-size: 128px 128px; /* Prevents stretching, keeping noise crisp */
             mix-blend-mode: overlay;
         }
         
@@ -96,7 +95,7 @@
             box-shadow: 
                 inset 4px 4px 10px rgba(0,0,0,0.8), 
                 inset -3px -3px 8px rgba(255,255,255,0.05),
-                0 1px 1px rgba(255,255,255,0.1);
+                0 1px 1px rgba(255,255,255,0.1); /* Subtle outer bottom lip */
             transition: all 0.3s ease;
         }
         .input-3d:focus {
@@ -112,31 +111,41 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-6 py-12">
+<body class="p-6 py-12">
 
-    <div class="card-container relative w-full max-w-2xl mx-auto opacity-0 translate-y-8 mt-10">
+    <div class="card-container relative w-full max-w-2xl mx-auto opacity-0 translate-y-8">
         
         <div id="interactive-card" class="relative rounded-3xl p-[1px] overflow-hidden group shadow-[0_0_40px_rgba(92,128,255,0.15)] hover:shadow-[0_0_60px_rgba(92,128,255,0.3)] transition-shadow duration-500">
             
             <div id="glow-border" class="absolute inset-0 opacity-40 group-hover:opacity-100 pointer-events-none"></div>
             
-            <div class="relative bg-black/60 backdrop-blur-2xl rounded-[23px] h-full w-full p-6 md:p-10 border border-white/5 z-10 overflow-hidden">
+            <div class="relative bg-black/60 backdrop-blur-2xl rounded-[23px] h-full w-full p-8 md:p-10 border border-white/5 z-10 overflow-hidden">
                 
                 <div class="absolute inset-0 pointer-events-none noise-texture opacity-30 z-0"></div>
                 <div class="absolute inset-0 pointer-events-none light-flare z-0"></div>
 
                 <div class="relative z-10">
+                    
                     <div class="text-center mb-10 form-element flex flex-col items-center">
-                        <img src="logo.png" alt="Track Verse Official Logo" class="h-28 md:h-36 mb-4 object-contain mix-blend-screen drop-shadow-[0_0_20px_rgba(92,128,255,0.4)]" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        
+                        <img 
+                            src="logo.png" 
+                            alt="Track Verse Official Logo" 
+                            class="h-28 md:h-36 mb-4 object-contain mix-blend-screen drop-shadow-[0_0_20px_rgba(92,128,255,0.4)]"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
                         <p class="hidden text-xs text-red-400 mb-4 border border-red-400/30 bg-red-400/10 p-2 rounded">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Logo image not found!
+                            <i class="fa-solid fa-triangle-exclamation"></i> Logo image not found or path is incorrect. Check GitHub case sensitivity!
                         </p>
+
                         <h2 class="font-display text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#a6c1ff] via-[#5c80ff] to-[#2541b3]">TRACK VERSE</h2>
                         <p class="text-white/50 text-sm tracking-widest uppercase mt-1">Official Registration Portal</p>
                     </div>
 
                     <form id="trackverse-reg" class="space-y-6">
+                        
                         <div class="grid grid-cols-1 gap-5">
+                            
                             <div class="relative form-element">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <i class="fa-solid fa-user-astronaut text-white/40"></i>
@@ -145,26 +154,39 @@
                             </div>
 
                             <div class="form-element space-y-4" id="members-area">
+                                
                                 <div class="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-4 relative overflow-hidden group">
                                     <div class="absolute top-0 left-0 w-1 h-full bg-accent/80"></div>
                                     <h3 class="text-accent text-sm font-bold uppercase tracking-widest flex items-center gap-2">
                                         <i class="fa-solid fa-medal"></i> Team Leader (Member 1)
                                     </h3>
+                                    
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="relative md:col-span-2">
-                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-user text-white/40"></i></div>
+                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <i class="fa-solid fa-user text-white/40"></i>
+                                            </div>
                                             <input type="text" name="leaderName" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30" placeholder="Full Name">
                                         </div>
+                                        
                                         <div class="relative md:col-span-2">
-                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-phone text-white/40"></i></div>
+                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <i class="fa-solid fa-phone text-white/40"></i>
+                                            </div>
                                             <input type="tel" name="leaderContact" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30" placeholder="Contact Number">
                                         </div>
+
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-code-branch text-white/40"></i></div>
+                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <i class="fa-solid fa-code-branch text-white/40"></i>
+                                            </div>
                                             <input type="text" name="leaderBranch" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30" placeholder="Branch / Dept">
                                         </div>
+
                                         <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-graduation-cap text-white/40"></i></div>
+                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <i class="fa-solid fa-graduation-cap text-white/40"></i>
+                                            </div>
                                             <select name="leaderYear" required class="w-full input-3d rounded-xl py-3 pl-11 pr-10 text-white appearance-none cursor-pointer">
                                                 <option value="" disabled selected class="text-white/30">Academic Year</option>
                                                 <option value="1">First Year</option>
@@ -172,7 +194,9 @@
                                                 <option value="3">Third Year</option>
                                                 <option value="4">Fourth Year</option>
                                             </select>
-                                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none"><i class="fa-solid fa-chevron-down text-white/40 text-xs"></i></div>
+                                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                                <i class="fa-solid fa-chevron-down text-white/40 text-xs"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -183,11 +207,13 @@
                                     <i class="fa-solid fa-user-plus"></i> Add Team Member (Max 4)
                                 </button>
                             </div>
+
                         </div>
 
                         <div class="pt-4 form-element">
                             <label class="block text-xs uppercase tracking-widest text-white/50 mb-3 ml-1 font-semibold">Hardware Setup</label>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                
                                 <label class="cursor-pointer group">
                                     <input type="radio" name="hardware" value="full" class="peer sr-only" checked>
                                     <div class="h-full border border-white/10 bg-surface rounded-xl p-4 peer-checked:border-accent peer-checked:bg-accent/10 hover:border-white/30 transition-all text-center flex flex-col items-center justify-center gap-2">
@@ -198,6 +224,7 @@
                                         </div>
                                     </div>
                                 </label>
+
                                 <label class="cursor-pointer group">
                                     <input type="radio" name="hardware" value="parts" class="peer sr-only">
                                     <div class="h-full border border-white/10 bg-surface rounded-xl p-4 peer-checked:border-accent peer-checked:bg-accent/10 hover:border-white/30 transition-all text-center flex flex-col items-center justify-center gap-2">
@@ -208,6 +235,7 @@
                                         </div>
                                     </div>
                                 </label>
+
                                 <label class="cursor-pointer group">
                                     <input type="radio" name="hardware" value="custom" class="peer sr-only">
                                     <div class="h-full border border-white/10 bg-surface rounded-xl p-4 peer-checked:border-accent peer-checked:bg-accent/10 hover:border-white/30 transition-all text-center flex flex-col items-center justify-center gap-2">
@@ -218,6 +246,7 @@
                                         </div>
                                     </div>
                                 </label>
+
                             </div>
                         </div>
 
@@ -227,9 +256,9 @@
                             <div class="text-xs text-white/70 leading-relaxed w-full">
                                 <span class="text-white/90 font-bold mb-2 block text-sm tracking-wide">Exclusive Perks & Kit Details</span>
                                 <ul class="space-y-2 list-none">
-                                    <li class="flex gap-2"><i class="fa-solid fa-check text-accent mt-0.5 text-[10px]"></i> <span><strong>Free Workshop:</strong> Your ₹200 fee secures entry and includes expert training.</span></li>
-                                    <li class="flex gap-2"><i class="fa-solid fa-check text-accent mt-0.5 text-[10px]"></i> <span><strong>Subsidized Kits:</strong> Thanks to our sponsors, get kits at heavily discounted prices!</span></li>
-                                    <li class="flex gap-2"><i class="fa-solid fa-check text-accent mt-0.5 text-[10px]"></i> <span><strong>Bonus Perk:</strong> Submit this robot officially as your academic project!</span></li>
+                                    <li class="flex gap-2"><i class="fa-solid fa-check text-accent mt-0.5 text-[10px]"></i> <span><strong>Free Workshop:</strong> Your ₹200 fee secures your team's entry and includes complete, expert-led training.</span></li>
+                                    <li class="flex gap-2"><i class="fa-solid fa-check text-accent mt-0.5 text-[10px]"></i> <span><strong>Subsidized Kits:</strong> Kits aren't free, but thanks to our official sponsors, you get them at heavily discounted, below-market prices!</span></li>
+                                    <li class="flex gap-2"><i class="fa-solid fa-check text-accent mt-0.5 text-[10px]"></i> <span><strong>Bonus Perk:</strong> The line-following robot you build can officially be submitted as your academic project!</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -244,36 +273,50 @@
 
                                 <div class="flex flex-col items-center justify-center space-y-4 border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-6">
                                     <div class="bg-black/50 p-2 rounded-xl shadow-[0_0_15px_rgba(92,128,255,0.2)] border border-white/10">
-                                        <img src="payment-qr.jpg" alt="Payment QR Code" class="w-28 h-28 md:w-32 md:h-32 object-contain rounded-md" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                        <p class="hidden text-xs text-red-400 p-2 text-center w-28 md:w-32">QR Code not found!</p>
+                                        <img src="payment-qr.jpg" alt="Track Verse Payment QR Code" class="w-28 h-28 md:w-32 md:h-32 object-contain rounded-md"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                        <p class="hidden text-xs text-red-400 p-2 text-center w-28 md:w-32">
+                                            QR Code image not found!
+                                        </p>
                                     </div>
                                     <div class="text-center">
                                         <p class="text-sm font-semibold text-white">Scan to Pay ₹200</p>
                                         <div class="mt-2 flex items-center justify-center gap-2 bg-black/50 px-3 py-1.5 rounded-lg border border-white/10">
                                             <span class="text-xs text-white/80 font-mono tracking-wide" id="upi-id">9404458295@ybl</span>
-                                            <button type="button" onclick="copyUPI()" class="text-white/40 hover:text-accent transition-colors p-1" title="Copy UPI ID"><i class="fa-regular fa-copy"></i></button>
+                                            <button type="button" onclick="copyUPI()" class="text-white/40 hover:text-accent transition-colors p-1" title="Copy UPI ID">
+                                                <i class="fa-regular fa-copy"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="flex flex-col justify-center space-y-4">
+                                    
                                     <div class="relative">
-                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-hashtag text-white/40"></i></div>
+                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <i class="fa-solid fa-hashtag text-white/40"></i>
+                                        </div>
                                         <input type="text" id="transactionId" name="transactionId" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30 font-mono text-sm" placeholder="Enter Transaction ID / UTR">
                                     </div>
+                                    
                                     <div class="bg-black/40 border border-white/5 rounded-xl p-4 flex gap-3 items-start relative overflow-hidden group">
                                         <div class="absolute left-0 top-0 w-1 h-full bg-accent/50 group-hover:bg-accent transition-colors"></div>
+                                        
                                         <i class="fa-solid fa-circle-info text-accent mt-0.5 opacity-80"></i>
                                         <div class="text-xs text-white/60 leading-relaxed">
                                             <span class="text-white/90 font-semibold mb-1 block">Where is the Transaction ID?</span>
-                                            Look for a 12-digit number labeled as <strong>UTR</strong> or <strong>Txn ID</strong> in your payment app.
+                                            Look for a 12-digit number labeled as <strong>UTR</strong>, <strong>Ref No.</strong>, or <strong>Txn ID</strong> in your payment app's success screen.
+                                            <br>
+                                            <span class="inline-block mt-1 text-accent/80 bg-accent/10 px-1.5 py-0.5 rounded font-mono border border-accent/20">e.g., 308412345678</span>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 form-element">
+                            
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
                                     <i class="fa-solid fa-ticket text-white/60"></i>
@@ -283,88 +326,38 @@
                                     <p class="font-display text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A6C4FF] to-[#5C8DF6]">₹200 <span class="text-sm font-normal text-white/40 font-sans">/team</span></p>
                                 </div>
                             </div>
+
                             <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-[#5C8DF6] to-[#2B57C4] text-white font-display font-bold px-8 py-4 rounded-xl hover:shadow-[0_0_25px_rgba(92,141,246,0.5)] transition-all duration-300 flex items-center justify-center gap-3 group">
                                 <span>SECURE MY SPOT</span>
                                 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                             </button>
+
                         </div>
                     </form>
-                </div> 
-            </div>
+                </div> </div>
         </div>
     </div>
-
-    <div class="mt-20 w-full max-w-4xl mx-auto text-center opacity-0 translate-y-8" id="sponsors-section">
-        <h3 class="font-display text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#a6c1ff] to-[#5c80ff] mb-3">Backed By Industry Leaders</h3>
-        <p class="text-white/50 text-sm md:text-base mb-10 max-w-2xl mx-auto px-4">Because of these incredible companies, we are able to bring Track Verse to life and provide high-quality robotics kits at subsidized rates.</p>
-
-        <div id="sponsors-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 px-4"></div>
-    </div>
-
-    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-500">
-        <div class="bg-[#0a0a10] border border-accent/30 rounded-3xl p-8 max-w-md w-full text-center shadow-[0_0_50px_rgba(92,128,255,0.15)] transform scale-95 transition-transform duration-500" id="success-card">
-            
-            <div class="w-24 h-24 mx-auto rounded-full bg-green-500/10 border-2 border-green-500 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] relative overflow-hidden">
-                <div class="absolute inset-0 bg-green-500/20 animate-ping rounded-full"></div>
-                <i class="fa-solid fa-check text-5xl text-green-400 z-10 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]"></i>
-            </div>
-            
-            <h2 class="font-display text-3xl font-bold text-white mb-2">Registration Done!</h2>
-            <p class="text-white/70 mb-6">Welcome to the race, <br>Team <span id="success-team-name" class="text-accent font-bold text-lg"></span>.</p>
-            
-            <div class="bg-white/5 border border-white/10 rounded-xl p-4 mb-8 text-left flex items-center gap-4">
-                <i class="fa-solid fa-receipt text-white/30 text-xl"></i>
-                <div>
-                    <p class="text-[10px] text-white/50 uppercase tracking-widest mb-0.5">Transaction Verification</p>
-                    <p class="font-mono text-white/90 text-sm" id="success-txn-id"></p>
-                </div>
-            </div>
-            
-            <a href="https://chat.whatsapp.com/LxvvSwmv7FZAkHa7gQRIha" target="_blank" class="block w-full bg-[#25D366] text-black font-bold py-4 rounded-xl hover:bg-[#1ebe5d] hover:shadow-[0_0_25px_rgba(37,211,102,0.4)] transition-all mb-4 text-sm md:text-base">
-                <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Join Official WhatsApp Group
-            </a>
-            
-            <button type="button" onclick="closeSuccessModal()" class="text-xs text-white/40 hover:text-white transition-colors uppercase tracking-widest font-semibold p-2">Close & Return</button>
-        </div>
-    </div>
-
 
     <script>
-        // ==========================================
-        // ⚙️ 1. SPONSOR CONFIGURATION AREA 
-        // ==========================================
-        // Simply edit this list to add/remove sponsors! 
-        const SPONSORS = [
-            { name: "Robo Labs", imageFileName: "sponsor1.png" },
-            { name: "Tech Corp", imageFileName: "sponsor2.png" },
-            { name: "InnovateX", imageFileName: "sponsor3.png" },
-            { name: "Future Build", imageFileName: "sponsor4.png" }
-        ];
-
-        const sponsorsGrid = document.getElementById('sponsors-grid');
-        SPONSORS.forEach(sponsor => {
-            const block = document.createElement('div');
-            block.className = "relative p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-accent/10 hover:border-accent/30 transition-all duration-300 group flex items-center justify-center h-28 md:h-32 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.3)]";
-            block.innerHTML = `
-                <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <img src="${sponsor.imageFileName}" alt="${sponsor.name} Logo" class="max-h-12 md:max-h-16 w-auto object-contain opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 z-10" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <span class="hidden text-white/80 font-display font-bold text-lg md:text-xl z-10">${sponsor.name}</span>
-            `;
-            sponsorsGrid.appendChild(block);
-        });
-        // ==========================================
-
-        // 2. Copy UPI Logic
+        // Copy UPI ID Function
         function copyUPI() {
             const upiText = document.getElementById('upi-id').innerText;
+            
             if(navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(upiText).then(() => showCopyFeedback());
+                navigator.clipboard.writeText(upiText).then(() => {
+                    showCopyFeedback();
+                });
             } else {
                 const textArea = document.createElement("textarea");
                 textArea.value = upiText;
                 document.body.appendChild(textArea);
                 textArea.select();
-                try { document.execCommand('copy'); showCopyFeedback(); } catch (err) {}
+                try {
+                    document.execCommand('copy');
+                    showCopyFeedback();
+                } catch (err) {
+                    console.error('Failed to copy', err);
+                }
                 document.body.removeChild(textArea);
             }
         }
@@ -373,47 +366,44 @@
             const btn = document.querySelector('button[onclick="copyUPI()"]');
             const originalHTML = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-check text-green-400"></i>';
-            setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
         }
 
-        // 3. Form Submission & Success Modal Logic
-        function closeSuccessModal() {
-            const modal = document.getElementById('success-modal');
-            const card = document.getElementById('success-card');
-            card.classList.replace('scale-100', 'scale-95');
-            modal.classList.replace('opacity-100', 'opacity-0');
-            setTimeout(() => { modal.classList.replace('pointer-events-auto', 'pointer-events-none'); }, 500);
-        }
-
+        // Form Submission Handler
         document.getElementById('trackverse-reg').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const btn = e.target.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
+            
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
             btn.classList.add('opacity-80', 'cursor-not-allowed');
 
-            // --- GOOGLE SHEETS URL CONNECTED ---
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbwoocXDvRhL5ItOydrLFTTOuu9utbbJ3d03cGhGpm6odYd4__LVWuk7N4GYDkYjPj3JsA/exec';
+            // --- GOOGLE SHEETS INTEGRATION ---
+            const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+            
             const formData = new FormData(document.getElementById('trackverse-reg'));
+            
+            if (scriptURL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+                alert("Developer Note: Please insert your Google Apps Script URL in the code to enable submissions.");
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                return;
+            }
 
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(response => {
-                    // Update Modal Data
-                    document.getElementById('success-team-name').innerText = document.getElementById('teamName').value;
-                    document.getElementById('success-txn-id').innerText = document.getElementById('transactionId').value;
+                    const teamName = document.getElementById('teamName').value;
+                    const txnId = document.getElementById('transactionId').value;
                     
-                    // Show Beautiful Modal
-                    const modal = document.getElementById('success-modal');
-                    const card = document.getElementById('success-card');
-                    modal.classList.replace('pointer-events-none', 'pointer-events-auto');
-                    modal.classList.replace('opacity-0', 'opacity-100');
-                    card.classList.replace('scale-95', 'scale-100');
-
-                    // Reset Form
+                    alert(`Registration Successful!\n\nWelcome to Track Verse, Team ${teamName}!\nWe have received your payment reference: ${txnId}. Your slot will be confirmed upon verification.`);
+                    
                     btn.innerHTML = originalText;
                     btn.classList.remove('opacity-80', 'cursor-not-allowed');
                     e.target.reset(); 
+                    
                     document.getElementById('additional-members').innerHTML = '';
                     toggleAddButtonVisibility();
                 })
@@ -425,7 +415,7 @@
                 });
         });
 
-        // 4. Dynamic Members Logic
+        // Dynamic Member Slot Handling
         const membersArea = document.getElementById('members-area');
         const addButton = document.getElementById('add-member');
         const additionalMembersContainer = document.getElementById('additional-members');
@@ -436,24 +426,38 @@
 
             if (currentTotalMembers < MAX_MEMBERS) {
                 const memberId = currentTotalMembers + 1;
+                
                 const newSlot = document.createElement('div');
                 newSlot.className = 'p-5 rounded-2xl bg-black/40 border border-white/5 space-y-4 relative opacity-0 translate-y-3 member-slot group'; 
                 newSlot.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <h3 class="text-white/70 text-sm font-bold uppercase tracking-widest member-title">Team Member ${memberId}</h3>
-                        <button type="button" class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-colors remove-member"><i class="fa-solid fa-xmark"></i></button>
+                        <h3 class="text-white/70 text-sm font-bold uppercase tracking-widest member-title">
+                            Team Member ${memberId}
+                        </h3>
+                        <button type="button" class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-colors remove-member" title="Remove Member">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="relative md:col-span-2">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-user text-white/40"></i></div>
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-user text-white/40"></i>
+                            </div>
                             <input type="text" name="member${memberId}Name" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30" placeholder="Full Name">
                         </div>
+
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-code-branch text-white/40"></i></div>
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-code-branch text-white/40"></i>
+                            </div>
                             <input type="text" name="member${memberId}Branch" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30" placeholder="Branch / Dept">
                         </div>
+
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fa-solid fa-graduation-cap text-white/40"></i></div>
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-graduation-cap text-white/40"></i>
+                            </div>
                             <select name="member${memberId}Year" required class="w-full input-3d rounded-xl py-3 pl-11 pr-10 text-white appearance-none cursor-pointer">
                                 <option value="" disabled selected class="text-white/30">Academic Year</option>
                                 <option value="1">First Year</option>
@@ -461,17 +465,30 @@
                                 <option value="3">Third Year</option>
                                 <option value="4">Fourth Year</option>
                             </select>
-                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none"><i class="fa-solid fa-chevron-down text-white/40 text-xs"></i></div>
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-chevron-down text-white/40 text-xs"></i>
+                            </div>
                         </div>
                     </div>
                 `;
 
                 additionalMembersContainer.appendChild(newSlot);
-                gsap.to(newSlot, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+                
+                gsap.to(newSlot, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: "power2.out"
+                });
 
                 newSlot.querySelector('.remove-member').addEventListener('click', function() {
                     gsap.to(newSlot, {
-                        opacity: 0, height: 0, padding: 0, margin: 0, duration: 0.3, ease: "power2.in",
+                        opacity: 0,
+                        height: 0,
+                        padding: 0,
+                        margin: 0,
+                        duration: 0.3,
+                        ease: "power2.in",
                         onComplete: () => {
                             newSlot.remove();
                             updatePlacholders();
@@ -479,6 +496,7 @@
                         }
                     });
                 });
+
                 toggleAddButtonVisibility();
             }
         });
@@ -497,20 +515,24 @@
             const slots = additionalMembersContainer.querySelectorAll('.member-slot');
             slots.forEach((slot, index) => {
                 const memberNumber = index + 2;
-                slot.querySelector('.member-title').innerText = `Team Member ${memberNumber}`;
+                const titleElement = slot.querySelector('.member-title');
+                titleElement.innerText = `Team Member ${memberNumber}`;
+                
+                // Update names for backend
                 slot.querySelector('input[placeholder="Full Name"]').name = `member${memberNumber}Name`;
                 slot.querySelector('input[placeholder="Branch / Dept"]').name = `member${memberNumber}Branch`;
                 slot.querySelector('select').name = `member${memberNumber}Year`;
             });
         }
 
-        // 5. Interactive Border Glow Logic
+        // Interactive Border Glow Logic (Mouse & Touch Tracking)
         const interactiveCard = document.getElementById('interactive-card');
         const glowBorder = document.getElementById('glow-border');
 
         const updateGlowPosition = (e) => {
             const rect = interactiveCard.getBoundingClientRect();
             let clientX, clientY;
+
             if (e.touches && e.touches.length > 0) {
                 clientX = e.touches[0].clientX;
                 clientY = e.touches[0].clientY;
@@ -518,23 +540,35 @@
                 clientX = e.clientX;
                 clientY = e.clientY;
             }
-            glowBorder.style.setProperty('--mouse-x', `${clientX - rect.left}px`);
-            glowBorder.style.setProperty('--mouse-y', `${clientY - rect.top}px`);
+
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
+            glowBorder.style.setProperty('--mouse-x', `${x}px`);
+            glowBorder.style.setProperty('--mouse-y', `${y}px`);
         };
+
         interactiveCard.addEventListener('mousemove', updateGlowPosition);
         interactiveCard.addEventListener('touchmove', updateGlowPosition, { passive: true });
 
-        // 6. GSAP Entrance Animation
+        // GSAP Entrance Animation
         window.addEventListener('DOMContentLoaded', () => {
             const tl = gsap.timeline();
-            tl.to(".card-container", { y: 0, opacity: 1, duration: 1, ease: "power3.out" });
-            tl.from(".form-element", { y: 15, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }, "-=0.4");
-            
-            // Trigger Sponsors Section Entrance
-            gsap.to("#sponsors-section", {
-                scrollTrigger: { trigger: "#sponsors-section", start: "top 80%" },
-                y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.5
+
+            tl.to(".card-container", {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                ease: "power3.out"
             });
+
+            tl.from(".form-element", {
+                y: 15,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out"
+            }, "-=0.4");
         });
     </script>
 </body>
