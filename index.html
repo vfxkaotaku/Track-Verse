@@ -141,14 +141,14 @@
                         
                         <!-- Track Verse Custom Logo -->
                         <img 
-                            src="./Untitled204_20260327225805.jpg" 
+                            src="Untitled204_20260327225805.png" 
                             alt="Track Verse Official Logo" 
                             class="h-28 md:h-36 mb-4 object-contain mix-blend-screen drop-shadow-[0_0_20px_rgba(92,128,255,0.4)]"
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
                         >
                         <!-- Fallback message if image is not in the same folder -->
                         <p class="hidden text-xs text-red-400 mb-4 border border-red-400/30 bg-red-400/10 p-2 rounded">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Logo image not found in current folder
+                            <i class="fa-solid fa-triangle-exclamation"></i> Logo image not found or path is incorrect. Check GitHub case sensitivity!
                         </p>
 
                         <h2 class="font-display text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#a6c1ff] via-[#5c80ff] to-[#2541b3]">TRACK VERSE</h2>
@@ -263,7 +263,68 @@
 
                         </div>
                     </div>
-                        <!-- Footer Action Area -->
+
+                    <!-- Payment Section -->
+                    <div class="pt-6 mt-6 border-t border-white/10 form-element">
+                        <label class="block text-xs uppercase tracking-widest text-white/50 mb-4 ml-1 font-semibold">
+                            <i class="fa-solid fa-qrcode text-accent mr-1"></i> Payment Verification
+                        </label>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface border border-white/10 rounded-2xl p-6 relative overflow-hidden">
+                            <!-- Subtle glow inside payment box -->
+                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-accent/20 blur-3xl rounded-full pointer-events-none"></div>
+
+                            <!-- QR Code Area -->
+                            <div class="flex flex-col items-center justify-center space-y-4 border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-6">
+                                <!-- Your Custom QR Code -->
+                                <div class="bg-black/50 p-2 rounded-xl shadow-[0_0_15px_rgba(92,128,255,0.2)] border border-white/10">
+                                    <img src="payment-qr.jpg" alt="Track Verse Payment QR Code" class="w-28 h-28 md:w-32 md:h-32 object-contain rounded-md"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                    <!-- Fallback message if image is not in the same folder -->
+                                    <p class="hidden text-xs text-red-400 p-2 text-center w-28 md:w-32">
+                                        QR Code image not found!
+                                    </p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-sm font-semibold text-white">Scan to Pay ₹200</p>
+                                    <div class="mt-2 flex items-center justify-center gap-2 bg-black/50 px-3 py-1.5 rounded-lg border border-white/10">
+                                        <span class="text-xs text-white/80 font-mono tracking-wide" id="upi-id">9404458295@ybl</span>
+                                        <button type="button" onclick="copyUPI()" class="text-white/40 hover:text-accent transition-colors p-1" title="Copy UPI ID">
+                                            <i class="fa-regular fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Transaction Details Area -->
+                            <div class="flex flex-col justify-center space-y-4">
+                                
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <i class="fa-solid fa-hashtag text-white/40"></i>
+                                    </div>
+                                    <input type="text" id="transactionId" required class="w-full input-3d rounded-xl py-3 pl-11 pr-4 text-white placeholder-white/30 font-mono text-sm" placeholder="Enter Transaction ID / UTR">
+                                </div>
+                                
+                                <!-- Reference Guide -->
+                                <div class="bg-black/40 border border-white/5 rounded-xl p-4 flex gap-3 items-start relative overflow-hidden group">
+                                    <!-- Hover highlight line -->
+                                    <div class="absolute left-0 top-0 w-1 h-full bg-accent/50 group-hover:bg-accent transition-colors"></div>
+                                    
+                                    <i class="fa-solid fa-circle-info text-accent mt-0.5 opacity-80"></i>
+                                    <div class="text-xs text-white/60 leading-relaxed">
+                                        <span class="text-white/90 font-semibold mb-1 block">Where is the Transaction ID?</span>
+                                        Look for a 12-digit number labeled as <strong>UTR</strong>, <strong>Ref No.</strong>, or <strong>Txn ID</strong> in your payment app's success screen.
+                                        <br>
+                                        <span class="inline-block mt-1 text-accent/80 bg-accent/10 px-1.5 py-0.5 rounded font-mono border border-accent/20">e.g., 308412345678</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Action Area -->
                         <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6 form-element">
                             
                             <!-- Fee Display -->
@@ -292,12 +353,48 @@
 
     <!-- Logic & Animation -->
     <script>
+        // Copy UPI ID Function
+        function copyUPI() {
+            const upiText = document.getElementById('upi-id').innerText;
+            
+            // Modern Clipboard API
+            if(navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(upiText).then(() => {
+                    showCopyFeedback();
+                });
+            } else {
+                // Fallback for older browsers/iframes
+                const textArea = document.createElement("textarea");
+                textArea.value = upiText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyFeedback();
+                } catch (err) {
+                    console.error('Failed to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showCopyFeedback() {
+            // Simple feedback mechanism replacing the alert
+            const btn = document.querySelector('button[onclick="copyUPI()"]');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check text-green-400"></i>';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }
+
         // Form Submission Handler
         document.getElementById('trackverse-reg').addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Extract the name for a personalized alert
             const teamName = document.getElementById('teamName').value;
+            const txnId = document.getElementById('transactionId').value;
             const btn = e.target.querySelector('button[type="submit"]');
             
             // Visual feedback on button
@@ -307,7 +404,7 @@
             
             // Simulate network request
             setTimeout(() => {
-                alert(`Registration Initiated!\n\nWelcome to Track Verse, Team ${teamName}!\nPlease proceed to the payment gateway to complete your ₹200 fee.`);
+                alert(`Registration Initiated!\n\nWelcome to Track Verse, Team ${teamName}!\nWe have received your payment reference: ${txnId}. Your slot will be confirmed upon verification.`);
                 
                 // Reset button
                 btn.innerHTML = originalText;
