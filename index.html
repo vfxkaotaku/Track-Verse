@@ -462,7 +462,7 @@
          */
         const sponsorConfig = {
             "TITLE SPONSOR": [
-                /*{ 
+               /* { 
                     name: "PLX SOLAR", 
                     logo: "sponsor/title/PLX(2).png", 
                     desc: "Energy & Infrastructure Partner",
@@ -471,7 +471,7 @@
                 }*/
             ],
             "GOLD PARTNER": [
-                /*{ 
+               /* { 
                     name: "GOLD PARTNER 1", 
                     logo: "sponsor/gold/logo.png", 
                     desc: "Technical Support",
@@ -512,29 +512,37 @@
                     stage.style.display = 'block';
                     gsap.to(stage, { opacity: 1, duration: 1.5 });
                     
-                    motivationTimeline = gsap.timeline();
+                    motivationTimeline = gsap.timeline({
+                        onComplete: () => {
+                            // Automatically hide skip arrow when sequence finishes naturally
+                            gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
+                                document.getElementById("skip-cinematic-arrow").style.display = 'none';
+                            }});
+                        }
+                    });
+
                     ['#line-1', '#line-2', '#line-3'].forEach((id) => {
                         motivationTimeline.to(id, { opacity: 1, y: -10, duration: 0.8 })
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
                     });
                     motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
-                        // Cleanup skip arrow
-                        gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5 });
+                        // Hide skip arrow when preparation button begins to appear
+                        gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
+                            document.getElementById("skip-cinematic-arrow").style.display = 'none';
+                        }});
                     }});
                     motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
                 }});
             }
         });
 
-        // REFINED SKIP FUNCTION (NO GLITCH)
         function skipMotivationSequence() {
             if (motivationTimeline) {
-                motivationTimeline.kill(); // INSTANTLY KILL PREVIOUS LOOPS
-                
-                // FORCE RESET ALL STATES
+                motivationTimeline.kill(); 
                 gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0, y: -30, display: 'none' });
                 gsap.set("#workshop-cta", { opacity: 1, y: 0, clearProps: "transform" });
-                gsap.set("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none' });
+                // Instantly remove skip trigger
+                gsap.set("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', display: 'none' });
             }
         }
 
@@ -566,15 +574,23 @@
 
         function showProceedButton() {
             const btn = document.getElementById('proceed-btn-container');
+            const skipBtn = document.getElementById('skip-btn-el');
+            
+            // Hide skip button when video finishes
+            gsap.to(skipBtn, { opacity: 0, duration: 0.5, onComplete: () => skipBtn.style.display = 'none' });
+            
             btn.classList.remove('pointer-events-none');
             gsap.to(btn, { opacity: 1, y: 0, duration: 1 });
         }
 
         function skipVideo() {
             const video = document.getElementById('trans-vid-asset');
+            const skipBtn = document.getElementById('skip-btn-el');
+            const loader = document.getElementById('cinematic-loader');
+            
             video.pause();
-            document.getElementById('skip-btn-el').style.display = 'none';
-            document.getElementById('cinematic-loader').style.display = 'none';
+            skipBtn.style.display = 'none';
+            loader.style.display = 'none';
             showProceedButton();
         }
 
@@ -584,7 +600,6 @@
             gsap.to(transStage, { opacity: 0, duration: 1, onComplete: () => {
                 transStage.style.display = 'none';
                 portal.style.display = 'flex';
-                // UNLOCK SCROLLING
                 document.body.style.overflow = 'auto';
                 document.documentElement.style.overflow = 'auto';
                 
