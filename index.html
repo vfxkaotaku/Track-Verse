@@ -292,6 +292,7 @@
                 <button class="bg-white text-black font-display btn-black-bold px-12 py-5 md:px-14 md:py-6 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-105 transition-transform shadow-2xl uppercase" onclick="startTransitionVideo()">Enter Arena</button>
             </div>
 
+            <!-- Skip Cinematic Arrow -->
             <div id="skip-cinematic-arrow" class="skip-arrow-trigger" onclick="skipMotivationSequence()">
                 <div class="arrow-set">
                     <i class="fa-solid fa-chevron-right"></i>
@@ -453,63 +454,46 @@
     <script>
         /**
          * ============================================================
-         * SPONSOR MANAGEMENT SYSTEM (EASY ADD)
+         * SPONSOR MANAGEMENT SYSTEM (GITHUB FOLDER STRUCTURE)
          * ============================================================
-         * To add more, just copy an object like { name: "...", logo: "..." }
-         * and paste it inside the square brackets [ ] of the correct tier.
+         * To add/edit sponsors:
+         * logoScale: 1.0 is default. 1.5 is 50% larger, 2.0 is double size.
+         * boxGradient: Set any CSS color or gradient for the background box.
          */
         const sponsorConfig = {
             "TITLE SPONSOR": [
-                /*{ 
+                { 
                     name: "PLX SOLAR", 
                     logo: "sponsor/title/PLX(2).png", 
                     desc: "Energy & Infrastructure Partner",
                     logoScale: 1.6, 
-                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))"
-                }*/
-                // Paste more Title Sponsors here...
+                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))"
+                }
             ],
             "GOLD PARTNER": [
-                /*{ 
-                    name: "GOLD SPONSOR 1", 
-                    logo: "sponsor/gold/logo1.png", 
-                    desc: "Technical Partner",
-                    logoScale: 1.2, 
-                    boxGradient: "rgba(255, 215, 0, 0.03)"
-                },
                 { 
-                    name: "GOLD SPONSOR 2", 
-                    logo: "sponsor/gold/logo2.png", 
-                    desc: "Resource Partner",
+                    name: "GOLD PARTNER 1", 
+                    logo: "sponsor/gold/logo.png", 
+                    desc: "Technical Support",
                     logoScale: 1.2, 
-                    boxGradient: "rgba(255, 215, 0, 0.03)"
-                }*/
-                // Paste more Gold Partners here...
+                    boxGradient: "rgba(255, 215, 0, 0.05)"
+                }
             ],
             "SILVER PARTNER": [
                 { 
                     name: "ATHARVA SOLAR TECHNOLOGY", 
                     logo: "sponsor/silver/AST.png", 
-                    desc: "Energy & Infrastructure Partner",
-                    logoScale: 1.6, // 160% size
-                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))"
+                    desc: "Renewable Energy Support",
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
                 },
-                  { 
+                { 
                     name: "VKO Studio", 
                     logo: "sponsor/silver/vko.svg", 
                     desc: "Designing Partner",
-                    logoScale: 1.6, // 160% size
-                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))"
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
                 }
-               /* { 
-                    name: "SILVER SPONSOR 2", 
-                    logo: "sponsor/silver/logo2.png", 
-                    desc: "Support Partner",
-                    logoScale: 1.0, 
-                    boxGradient: "rgba(192, 192, 192, 0.03)"
-                }*/
-                
-                // Paste more Silver Partners here...
             ]
         };
 
@@ -534,6 +518,7 @@
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
                     });
                     motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
+                        // Cleanup skip arrow
                         gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5 });
                     }});
                     motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
@@ -541,11 +526,14 @@
             }
         });
 
+        // REFINED SKIP FUNCTION (NO GLITCH)
         function skipMotivationSequence() {
             if (motivationTimeline) {
-                motivationTimeline.kill(); 
-                gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0, y: -30 });
-                gsap.set("#workshop-cta", { opacity: 1, y: 0 });
+                motivationTimeline.kill(); // INSTANTLY KILL PREVIOUS LOOPS
+                
+                // FORCE RESET ALL STATES
+                gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0, y: -30, display: 'none' });
+                gsap.set("#workshop-cta", { opacity: 1, y: 0, clearProps: "transform" });
                 gsap.set("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none' });
             }
         }
@@ -596,6 +584,7 @@
             gsap.to(transStage, { opacity: 0, duration: 1, onComplete: () => {
                 transStage.style.display = 'none';
                 portal.style.display = 'flex';
+                // UNLOCK SCROLLING
                 document.body.style.overflow = 'auto';
                 document.documentElement.style.overflow = 'auto';
                 
@@ -720,7 +709,8 @@
                 })
                 .catch(() => { 
                     alert("Transmission Error."); 
-                    btn.disabled = false; btn.innerHTML = "RETRY"; 
+                    btn.disabled = false; 
+                    btn.innerHTML = "RETRY"; 
                 });
         });
     </script>
