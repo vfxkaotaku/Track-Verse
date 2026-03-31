@@ -38,7 +38,7 @@
 
         body, html {
             margin: 0; padding: 0;
-            background-color: var(--race-black); /* Fallback */
+            background-color: var(--race-black);
             color: white;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
@@ -48,12 +48,12 @@
         /* --- STACKING FIX: Background Elements --- */
         .master-bg {
             position: fixed; inset: 0; 
-            z-index: 0; /* Above body, below content */
+            z-index: 0;
             background-image: url('background.svg'); 
             background-size: cover; 
             background-position: center;
             background-repeat: no-repeat; 
-            filter: brightness(0.35) saturate(0.7);
+            filter: brightness(0.3) saturate(0.6);
         }
 
         .bg-overlay {
@@ -63,10 +63,11 @@
             pointer-events: none;
         }
 
+        /* Anti-Pixelated Smooth Bloom Flare */
         .sun-flare {
-            position: fixed; top: -10%; left: -10%; width: 45%; height: 45%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 50%, transparent 80%);
-            z-index: 2; pointer-events: none; filter: blur(100px);
+            position: fixed; top: -10%; left: -10%; width: 50%; height: 50%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 50%, transparent 80%);
+            z-index: 2; pointer-events: none; filter: blur(120px);
             animation: flare-drift 15s infinite alternate ease-in-out;
         }
         @keyframes flare-drift { from { opacity: 0.3; transform: scale(1); } to { opacity: 0.6; transform: scale(1.1); } }
@@ -97,7 +98,7 @@
         /* --- Content Sections --- */
         #intro-alpha, #motivation-stage, #transition-video-stage, #registration-portal {
             position: fixed; inset: 0; display: none; opacity: 0;
-            z-index: 10; /* Everything above background layers */
+            z-index: 10;
         }
         #intro-alpha { z-index: 1100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: black; opacity: 1; }
         #registration-portal { position: relative; z-index: 200; overflow-y: auto; padding-top: 100px; }
@@ -114,7 +115,6 @@
             opacity: 0.06; pointer-events: none; filter: url(#noiseFilter); z-index: 1;
         }
 
-        /* --- Reference Code Texture & Effects --- */
         .noise-texture {
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             background-repeat: repeat; background-size: 128px 128px; mix-blend-mode: overlay;
@@ -135,9 +135,9 @@
         /* Cinematic Text Scaling */
         .script-line {
             font-family: 'Syncopate', sans-serif;
-            font-size: clamp(0.9rem, 4vw, 2.2rem); 
+            font-size: clamp(0.85rem, 3.5vw, 1.8rem); 
             font-weight: 700; position: absolute; opacity: 0;
-            letter-spacing: clamp(2px, 1.5vw, 8px); 
+            letter-spacing: clamp(1px, 1vw, 6px); 
             text-transform: uppercase;
             background: linear-gradient(180deg, #fff 20%, #444 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -155,7 +155,7 @@
 
         .workshop-badge {
             background: white; color: black; font-size: 8px; font-weight: 900;
-            padding: 3px 8px; border-radius: 20px; letter-spacing: 1px;
+            padding: 3px 10px; border-radius: 20px; letter-spacing: 1px;
             animation: badge-pulse 2s infinite; box-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
         @keyframes badge-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
@@ -215,7 +215,7 @@
         </filter>
     </svg>
 
-    <!-- Correct Background Stack -->
+    <!-- Background Layer Stack -->
     <div class="master-bg"></div>
     <div class="bg-overlay"></div>
     <div class="sun-flare"></div>
@@ -228,45 +228,44 @@
         </div>
     </header>
 
-    <!-- PHASE 1 -->
+    <!-- PHASE 1: LOADING CLIP -->
     <div id="intro-alpha">
         <div class="central-clip-container mb-8">
             <video id="alpha-video" class="w-full h-full object-cover" autoplay muted playsinline>
                 <source src="loadingclip.webm" type="video/webm">
             </video>
         </div>
-        <div class="font-display font-bold text-[8px] md:text-xs tracking-[8px] md:tracking-[10px] flicker opacity-40 uppercase">System Sync Initializing</div>
+        <div class="font-display font-bold text-[8px] md:text-xs tracking-[8px] md:tracking-[10px] flicker opacity-40 uppercase">System Initializing</div>
     </div>
 
-    <!-- PHASE 2 -->
+    <!-- PHASE 2: MOTIVATION -->
     <div id="motivation-stage">
         <div class="relative h-full flex flex-col items-center justify-center p-6 text-center">
             <h1 class="script-line hover-glow" id="line-1">BUILD THE FUTURE.</h1>
             <h1 class="script-line hover-glow" id="line-2">PROGRAM THE PATH.</h1>
             <h1 class="script-line hover-glow" id="line-3">RACE FOR GLORY.</h1>
 
-            <div class="opacity-0 translate-y-12 transition-all duration-1000 flex flex-col items-center gap-8 md:gap-10" id="workshop-cta">
+            <div class="opacity-0 translate-y-12 transition-all duration-1000 flex flex-col items-center gap-6" id="workshop-cta">
                 <div class="matte-surface p-8 md:p-12 max-w-lg grain">
-                    <div class="flex items-center justify-center gap-3 mb-8">
-                        <p class="text-[9px] font-bold tracking-[4px] uppercase text-zinc-500 flicker">Preparation Stage</p>
-                        <span class="workshop-badge">FREE WORKSHOP</span>
+                    <div class="flex flex-col items-center gap-4 mb-6">
+                        <p class="text-[9px] font-bold tracking-[4px] uppercase text-zinc-500 flicker">Preparation Phase</p>
+                        <img src="prelogo.png" alt="Prep Phase Logo" class="h-16 md:h-20 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" onerror="this.style.display='none'">
+                        <span class="workshop-badge">FREE TECHNICAL WORKSHOP</span>
                     </div>
-                    <!-- SVG Logo Link -->
-                    <img src="logo.svg" alt="Logo" class="h-16 md:h-24 mx-auto mb-8 drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]">
-                    <p class="text-white/50 text-[10px] tracking-[6px] mb-6 uppercase font-black">Build • Program • Race</p>
-                    <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4">Unlock expert robotics pathfinding logic in our <span class="text-white font-bold underline underline-offset-4">Free Technical Workshop</span> before the race.</p>
+                    <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4">Master robotic optimization before competition begins. Access to workshop included with registration.</p>
                 </div>
                 <button class="bg-white text-black font-display btn-black-bold px-12 py-5 md:px-14 md:py-6 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-105 transition-transform shadow-2xl uppercase" onclick="startTransitionVideo()">Enter Arena</button>
             </div>
         </div>
     </div>
 
-    <!-- PHASE 2.5 -->
+    <!-- PHASE 2.5: CINEMATIC -->
     <div id="transition-video-stage">
         <div class="relative w-full h-full flex items-center justify-center">
             <button onclick="skipVideo()" class="skip-btn uppercase">Skip Cinematic</button>
-            <video id="trans-vid-pc" class="desktop-video" playsinline muted><source src="landscape-clip.mp4" type="video/mp4"></video>
-            <video id="trans-vid-mob" class="mobile-video" playsinline muted><source src="portrait-clip.mp4" type="video/mp4"></video>
+            <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline muted>
+                <source src="cinematic.webm" type="video/webm">
+            </video>
             <div id="proceed-btn-container" class="absolute bottom-24 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none">
                 <button onclick="openPortal()" class="bg-white text-black font-display btn-black-bold px-12 py-5 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.4)] uppercase">
                     Proceed to Registration
@@ -275,11 +274,10 @@
         </div>
     </div>
 
-    <!-- PHASE 3 -->
+    <!-- PHASE 3: REGISTRATION -->
     <div id="registration-portal">
         <div class="w-full max-w-2xl mx-auto px-4 mt-8 md:mt-20 pb-20">
             <div class="flex justify-center mb-8">
-                <!-- SVG Logo Link -->
                 <img src="logo.svg" alt="Logo" class="main-logo-top">
             </div>
 
@@ -291,8 +289,10 @@
                     <div class="relative z-10">
                         <div class="text-center mb-10 form-element">
                             <h2 class="font-space text-3xl md:text-5xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#cccccc] to-[#666666] uppercase hover-glow">TRACK VERSE</h2>
-                            <div class="flex flex-col md:flex-row items-center justify-center gap-2 mt-2">
-                                <p class="text-white/40 text-[9px] tracking-[4px] uppercase font-display">Identity Portal</p>
+                            <p class="text-white/40 text-[10px] tracking-[4px] uppercase font-display">Identity Portal</p>
+                            
+                            <!-- Moved Badge to independent position below subtitle -->
+                            <div class="mt-4 flex justify-center">
                                 <span class="workshop-badge">FREE WORKSHOP INCLUDED</span>
                             </div>
                         </div>
@@ -328,20 +328,44 @@
                                     <label><input type="radio" name="hardware" value="full" class="peer sr-only" checked>
                                     <div class="hardware-box p-4 bg-white/5 text-center flex flex-col items-center gap-1 peer-checked:border-white">
                                         <i class="fa-solid fa-microchip text-lg opacity-40"></i><div class="text-[9px] font-black uppercase">Need Kit</div>
+                                        <div class="text-[7px] text-white/30 uppercase">Via Sponsors</div>
                                     </div></label>
                                     <label><input type="radio" name="hardware" value="custom" class="peer sr-only">
                                     <div class="hardware-box p-4 bg-white/5 text-center flex flex-col items-center gap-1 peer-checked:border-white">
                                         <i class="fa-solid fa-wrench text-lg opacity-40"></i><div class="text-[9px] font-black uppercase">Bring Own</div>
+                                        <div class="text-[7px] text-white/30 uppercase">Personal Setup</div>
                                     </div></label>
                                 </div>
                                 <div class="mt-4 p-4 rounded-xl border border-white/5 bg-black/60">
                                     <p class="text-[8px] text-white/40 text-center leading-relaxed">
-                                        <span class="text-white font-black uppercase">Important Note:</span> Identity fee (₹200) covers registration & workshop entry only. Robot hardware costs are not included.
+                                        <span class="text-white font-black uppercase">Note:</span> ₹200 fee covers registration & workshop entry only. Robot hardware costs are separate.
                                     </p>
                                 </div>
                             </div>
 
-                            <button type="submit" id="submit-btn" class="btn-3d w-full bg-gradient-to-r from-white via-zinc-200 to-zinc-400 text-black font-display btn-black-bold py-6 rounded-2xl flex items-center justify-center gap-3 group text-[11px] tracking-[4px] uppercase shadow-2xl">
+                            <div class="pt-6 border-t border-white/10">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface border border-white/10 rounded-2xl p-6">
+                                    <div class="flex flex-col items-center justify-center space-y-4">
+                                        <div class="bg-white p-2 rounded-xl">
+                                            <img src="payment-qr.jpg" alt="QR" class="w-28 h-28" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=9404458295@ybl'">
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-xs font-black text-white uppercase tracking-widest">Pay ₹200</p>
+                                            <span class="text-[10px] font-mono text-white/40" id="upi-id">9404458295@ybl</span>
+                                            <button type="button" onclick="copyUPI()" class="ml-2 text-white/30 hover:text-white"><i class="fa-regular fa-copy"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-4 flex flex-col justify-center">
+                                        <input type="text" id="transactionId" name="transactionId" required class="w-full input-3d rounded-xl py-3 px-4 text-white text-xs font-mono uppercase" placeholder="Transaction ID / UTR">
+                                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                                            <p class="text-[10px] text-white font-black uppercase mb-1">Workshop Entry</p>
+                                            <p class="text-[9px] text-white/40">Includes Admission + Technical Training.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="submit-btn" class="btn-3d w-full bg-gradient-to-r from-white via-zinc-200 to-zinc-400 text-black font-display font-black py-6 rounded-2xl flex items-center justify-center gap-3 group text-[11px] tracking-[4px] uppercase shadow-2xl">
                                 <span>Secure My Spot</span>
                                 <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                             </button>
@@ -368,15 +392,14 @@
         <div class="max-w-4xl mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center mb-20 gap-8">
                 <h2 class="font-space text-3xl md:text-4xl font-black italic tracking-tighter uppercase hover-glow">Partners Dashboard</h2>
-                <button onclick="closeSponsorModal()" class="close-badge-highlight uppercase">Close</button>
+                <button onclick="closeSponsorModal()" class="close-badge-highlight uppercase">Close Dashboard</button>
             </div>
             <div class="space-y-20">
                 <div class="space-y-10 sponsor-slide-item">
                     <div class="flex items-center gap-4"><span class="tier-tag">TITLE SPONSOR</span> <div class="h-[1px] flex-grow bg-white/10"></div></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="matte-surface p-12 flex flex-col items-center gap-6 group hover:border-white/20 transition-all">
-                            <!-- Correct Filename PLX(2).png -->
-                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=PLX+SOLAR'">
+                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=LOGO'">
                             <span class="font-space font-black text-xl tracking-[8px] group-hover:text-white transition-colors uppercase">PLX SOLAR</span>
                         </div>
                     </div>
@@ -390,14 +413,14 @@
         <div class="bg-[#0a0a10] border border-white/20 rounded-[40px] p-10 max-w-md w-full text-center shadow-2xl transform scale-95 transition-transform duration-500" id="success-card">
             <div class="w-20 h-20 mx-auto rounded-full bg-white/10 border-2 border-white flex items-center justify-center mb-6"><i class="fa-solid fa-check text-4xl text-white"></i></div>
             <h2 class="font-space text-2xl font-black text-white mb-2 uppercase italic hover-glow">Transmitted!</h2>
-            <p class="text-white/50 mb-8 text-sm">Deployment Successful. Welcome to Track Verse, <br><span id="success-team-name" class="text-white font-black"></span>.</p>
+            <p class="text-white/50 mb-8 text-sm font-sans leading-relaxed">Deployment Successful. Welcome to Track Verse, <br><span id="success-team-name" class="text-white font-black"></span>.</p>
             <a href="https://chat.whatsapp.com/LxvvSwmv7FZAkHa7gQRIha" target="_blank" class="block w-full bg-[#25D366] text-black font-bold py-5 rounded-2xl hover:bg-[#1ebe5d] transition-all mb-4 text-xs tracking-widest uppercase">Join WhatsApp</a>
-            <button onclick="window.location.reload()" class="text-[9px] text-white/20 hover:text-white transition-colors uppercase tracking-[4px] font-black p-2">EXIT</button>
+            <button onclick="window.location.reload()" class="text-[9px] text-white/20 hover:text-white transition-colors uppercase tracking-[4px] font-black p-2">EXIT SYSTEM</button>
         </div>
     </div>
 
     <script>
-        // Smooth start
+        // Stage Management
         document.addEventListener('DOMContentLoaded', () => {
             const alphaVideo = document.getElementById('alpha-video');
             const introTimer = setTimeout(proceedToMotivation, 4500);
@@ -426,9 +449,9 @@
                 motivation.style.display = 'none';
                 transStage.style.display = 'block';
                 gsap.to(transStage, { opacity: 1, duration: 1 });
-                const activeVid = window.innerWidth > window.innerHeight ? document.getElementById('trans-vid-pc') : document.getElementById('trans-vid-mob');
-                activeVid.play();
-                activeVid.onended = showProceedButton;
+                const video = document.getElementById('trans-vid-asset');
+                video.play();
+                video.onended = showProceedButton;
             }});
         }
 
@@ -439,7 +462,8 @@
         }
 
         function skipVideo() {
-            document.querySelectorAll('video').forEach(v => v.pause());
+            const video = document.getElementById('trans-vid-asset');
+            video.pause();
             showProceedButton();
         }
 
@@ -474,12 +498,20 @@
             const container = document.getElementById('marquee-inner');
             container.innerHTML = [...partners, ...partners, ...partners, ...partners].map(p => `
                 <div class="sponsor-item-mini">
-                    <div class="sponsor-logo-box"><img src="${p.logo}" alt="${p.name}" class="h-8 w-auto brightness-200" onerror="this.src='https://via.placeholder.com/100x50/000000/FFFFFF?text=LOGO'"></div>
+                    <div class="sponsor-logo-box"><img src="${p.logo}" alt="${p.name}" class="h-8 md:h-10 w-auto brightness-200" onerror="this.src='https://via.placeholder.com/100x50/000000/FFFFFF?text=LOGO'"></div>
                     <span class="text-[7px] font-black uppercase tracking-[2px] opacity-40">${p.name}</span>
                 </div>
             `).join('');
         }
 
+        function copyUPI() {
+            navigator.clipboard.writeText("9404458295@ybl");
+            const btn = document.querySelector('button[onclick="copyUPI()"]');
+            btn.innerHTML = '<i class="fa-solid fa-check text-white"></i>';
+            setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i>', 2000);
+        }
+
+        // Spotlight Follower
         const card = document.getElementById('interactive-card');
         const glow = document.getElementById('glow-border');
         card.addEventListener('mousemove', (e) => {
@@ -518,7 +550,7 @@
         document.getElementById('trackverse-reg').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> SYNCING...`;
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> TRANSMITTING...`;
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwoocXDvRhL5ItOydrLFTTOuu9utbbJ3d03cGhGpm6odYd4__LVWuk7N4GYDkYjPj3JsA/exec';
             fetch(scriptURL, { method: 'POST', body: new FormData(this) })
                 .then(() => {
@@ -527,7 +559,7 @@
                     modal.classList.remove('pointer-events-none'); modal.style.opacity = '1';
                     document.getElementById('success-card').classList.replace('scale-95', 'scale-100');
                 })
-                .catch(() => { alert("Sync Error."); btn.disabled = false; btn.innerHTML = "RETRY"; });
+                .catch(() => { alert("Transmission Error."); btn.disabled = false; btn.innerHTML = "RETRY"; });
         });
     </script>
 </body>
