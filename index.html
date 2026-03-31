@@ -41,7 +41,7 @@
             background-color: var(--race-black);
             color: white;
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden; /* LOCKED BY DEFAULT */
             min-height: 100vh;
         }
 
@@ -100,7 +100,17 @@
             z-index: 10;
         }
         #intro-alpha { z-index: 1100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: black; opacity: 1; }
-        #registration-portal { position: relative; z-index: 200; overflow-y: auto; padding-top: 100px; }
+        
+        #registration-portal { 
+            position: relative; 
+            z-index: 200; 
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-bottom: 80px;
+        }
 
         .matte-surface {
             position: relative;
@@ -165,7 +175,6 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- Loader Circle --- */
         .video-loader {
             width: 40px; height: 40px;
             border: 3px solid rgba(255,255,255,0.1);
@@ -183,7 +192,7 @@
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Skip Arrow for Motivational Stage */
+        /* Skip Arrow Animation */
         .skip-arrow-trigger {
             position: absolute; bottom: 30px; opacity: 0;
             cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -196,7 +205,7 @@
         .arrow-set i:nth-child(3) { animation-delay: 0.4s; }
         @keyframes arrow-ping { 0%, 100% { opacity: 0.2; transform: translateX(0); } 50% { opacity: 1; transform: translateX(5px); } }
 
-        .main-logo-top { width: clamp(140px, 50vw, 200px); height: auto; margin: 0 auto 30px; filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); mix-blend-mode: screen; }
+        .main-logo-top { width: clamp(140px, 50vw, 200px); height: auto; filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); mix-blend-mode: screen; }
 
         #sponsor-modal {
             position: fixed; inset: 0; z-index: 3000;
@@ -216,14 +225,19 @@
         }
 
         .sponsor-marquee-container { width: 100%; overflow: hidden; padding: 40px 0; cursor: pointer; }
-        .sponsor-marquee-content { display: inline-flex; animation: marquee 35s linear infinite; gap: 80px; align-items: center; white-space: nowrap; }
+        .sponsor-marquee-content { display: inline-flex; animation: marquee 40s linear infinite; gap: 100px; align-items: center; white-space: nowrap; }
         
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
 
-        .sponsor-logo-box { min-width: 180px; height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; }
+        .sponsor-logo-box { 
+            display: flex; align-items: center; justify-content: center; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 20px; padding: 25px; 
+            transition: all 0.4s ease;
+        }
         
         .hardware-grid label { cursor: pointer; }
         .hardware-grid input:checked + .hardware-box { border-color: white; background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
@@ -238,7 +252,6 @@
         </filter>
     </svg>
 
-    <!-- Master Layer Stack -->
     <div class="master-bg"></div>
     <div class="bg-overlay"></div>
     <div class="sun-flare"></div>
@@ -279,7 +292,7 @@
                 <button class="bg-white text-black font-display btn-black-bold px-12 py-5 md:px-14 md:py-6 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-105 transition-transform shadow-2xl uppercase" onclick="startTransitionVideo()">Enter Arena</button>
             </div>
 
-            <!-- Skip Cinematic Arrow -->
+            <!-- Skip Arrow Trigger -->
             <div id="skip-cinematic-arrow" class="skip-arrow-trigger" onclick="skipMotivationSequence()">
                 <div class="arrow-set">
                     <i class="fa-solid fa-chevron-right"></i>
@@ -294,21 +307,14 @@
     <!-- PHASE 2.5: CINEMATIC CLIP -->
     <div id="transition-video-stage">
         <div class="relative w-full h-full flex flex-col items-center justify-center">
-            
-            <!-- Video Loader (Visible while buffering) -->
             <div id="cinematic-loader" class="absolute z-50 flex flex-col items-center gap-4">
                 <div class="video-loader"></div>
                 <span class="text-[9px] tracking-[3px] opacity-40 uppercase font-black">Syncing Stream...</span>
             </div>
-
-            <!-- SKIP BUTTON -->
             <button id="skip-btn-el" onclick="skipVideo()" class="skip-btn uppercase">Skip</button>
-            
             <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline>
                 <source src="cinematic.webm" type="video/webm">
             </video>
-
-            <!-- PROCEED BUTTON (Centered) -->
             <div id="proceed-btn-container" class="absolute bottom-24 left-1/2 -translate-x-1/2 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001]">
                 <button onclick="openPortal()" class="bg-white text-black font-display btn-black-bold px-12 py-5 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.5)] uppercase">
                     Proceed to Registration
@@ -319,12 +325,12 @@
 
     <!-- PHASE 3: REGISTRATION -->
     <div id="registration-portal">
-        <div class="w-full max-w-2xl mx-auto px-4 mt-8 md:mt-20 pb-20">
-            <div class="flex justify-center mb-8">
+        <div class="w-full max-w-2xl mx-auto px-4 flex flex-col items-center pt-20 pb-10">
+            <div class="flex justify-center mb-16">
                 <img src="logo.svg" alt="Logo" class="main-logo-top">
             </div>
 
-            <div id="interactive-card" class="relative rounded-[32px] p-[1px] overflow-hidden group shadow-[0_0_60px_rgba(0,0,0,0.5)]">
+            <div id="interactive-card" class="relative w-full rounded-[32px] p-[1px] overflow-hidden group shadow-[0_0_60px_rgba(0,0,0,0.5)]">
                 <div id="glow-border" class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div class="relative bg-black/80 backdrop-blur-3xl rounded-[31px] p-6 md:p-10 border border-white/10 z-10 overflow-hidden grain">
@@ -339,7 +345,6 @@
                         </div>
 
                         <form id="trackverse-reg" class="space-y-6">
-                            <!-- Registration fields (Team Name, Members, Robo-Kit, Payment) -->
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-white/40"><i class="fa-solid fa-user-astronaut"></i></div>
                                 <input type="text" id="teamName" name="teamName" required class="w-full input-3d rounded-xl py-4 pl-12 pr-6 text-white placeholder-white/30 font-black tracking-widest uppercase border-white/40 bg-black/60" placeholder="TEAM DESIGNATION">
@@ -380,7 +385,6 @@
                                 </div>
                             </div>
 
-                            <!-- Payment Section -->
                             <div class="pt-6 border-t border-white/10">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface border border-white/10 rounded-2xl p-6">
                                     <div class="flex flex-col items-center justify-center space-y-4">
@@ -412,32 +416,27 @@
                 </div>
             </div>
 
-            <!-- Sponsor Marquee Section -->
-            <div class="mt-24 overflow-hidden" id="sponsors-section">
+            <!-- Sponsor Marquee -->
+            <div class="w-full mt-24 mb-10" id="sponsors-section">
                 <div class="text-center mb-6 px-4">
                     <h3 class="font-space text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#ffffff] to-[#666666] uppercase italic tracking-widest hover-glow">Industry Partners</h3>
                     <p class="text-[8px] text-white/30 tracking-[4px] mt-2 uppercase font-black">Tap to view Dashboard</p>
                 </div>
                 <div class="sponsor-marquee-container" onclick="openSponsorModal()">
-                    <div class="sponsor-marquee-content" id="marquee-inner">
-                        <!-- Marquee content injected via JavaScript -->
-                    </div>
+                    <div class="sponsor-marquee-content" id="marquee-inner"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SPONSOR DASHBOARD MODAL -->
+    <!-- SPONSOR DASHBOARD -->
     <div id="sponsor-modal">
         <div class="max-w-4xl mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center mb-16 gap-8">
                 <h2 class="font-space text-3xl md:text-4xl font-black italic tracking-tighter uppercase hover-glow">Partners Dashboard</h2>
                 <button onclick="closeSponsorModal()" class="close-badge-highlight uppercase">Close Dashboard</button>
             </div>
-            
-            <div id="sponsor-dashboard-content" class="space-y-16">
-                <!-- Tiers and Sponsors injected here -->
-            </div>
+            <div id="sponsor-dashboard-content" class="space-y-16"></div>
         </div>
     </div>
 
@@ -455,27 +454,39 @@
     <script>
         /**
          * ============================================================
-         * SPONSOR MANAGEMENT SYSTEM (EASY EDIT)
+         * SPONSOR MANAGEMENT SYSTEM (GITHUB FOLDER STRUCTURE)
          * ============================================================
-         * To add/delete sponsors, just update the lists below.
-         * The images will automatically load from your repo folders.
+         * logoScale: Adjust size by multiplier (1.0 = original, 1.5 = 150%)
+         * boxGradient: CSS background property (solid color or gradient)
          */
         const sponsorConfig = {
             "TITLE SPONSOR": [
-                { name: "PLX SOLAR", logo: "sponsor/title/PLX(2).png", desc: "Energy & Infrastructure Partner" }
+                { 
+                    name: "PLX SOLAR", 
+                    logo: "sponsor/title/PLX(2).png", 
+                    desc: "Energy & Infrastructure Partner",
+                    logoScale: 1.6, // 160% size
+                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))"
+                }
             ],
             "GOLD PARTNER": [
-                 { name: "PLX Solar", logo: "sponsor/gold/plxsolar.png", desc: "Technical Support" }
+                /* Example: 
+                { 
+                    name: "COMPANY", 
+                    logo: "sponsor/gold/logo.png", 
+                    desc: "Technical Partner",
+                    logoScale: 1.2, 
+                    boxGradient: "rgba(255, 215, 0, 0.05)"
+                } 
+                */
             ],
             "SILVER PARTNER": [
-                // { name: "COMPANY NAME", logo: "sponsor/silver/company.png", desc: "Associate Partner" }
+                // Add silver partners here...
             ]
         };
 
-        // --- Cinematic Variables ---
         let motivationTimeline;
 
-        // Cinematic Sequence Logic
         document.addEventListener('DOMContentLoaded', () => {
             const alphaVideo = document.getElementById('alpha-video');
             const introTimer = setTimeout(proceedToMotivation, 4500);
@@ -494,19 +505,21 @@
                         motivationTimeline.to(id, { opacity: 1, y: -10, duration: 0.8 })
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
                     });
-                    motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1 });
-                    motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 });
+                    motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
+                        // Hide skip arrow when preparation phase starts
+                        gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5 });
+                    }});
+                    motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
                 }});
             }
         });
 
-        // Skip logic for 3-point arrow
         function skipMotivationSequence() {
             if (motivationTimeline) {
-                motivationTimeline.progress(0.9); // Skip almost to end
-                gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0 }); // Hide text lines
-                gsap.to("#workshop-cta", { opacity: 1, y: 0, duration: 0.5 }); // Reveal CTA
-                gsap.to("#skip-cinematic-arrow", { opacity: 0, duration: 0.3 }); // Hide arrow
+                motivationTimeline.progress(0.9);
+                gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0 });
+                gsap.to("#workshop-cta", { opacity: 1, y: 0, duration: 0.5 });
+                gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.3 });
             }
         }
 
@@ -532,7 +545,6 @@
                         video.play();
                     }, { once: true });
                 }
-                
                 video.onended = showProceedButton;
             }});
         }
@@ -545,12 +557,9 @@
 
         function skipVideo() {
             const video = document.getElementById('trans-vid-asset');
-            const skipBtn = document.getElementById('skip-btn-el');
-            const loader = document.getElementById('cinematic-loader');
-            
             video.pause();
-            skipBtn.style.display = 'none';
-            loader.style.display = 'none';
+            document.getElementById('skip-btn-el').style.display = 'none';
+            document.getElementById('cinematic-loader').style.display = 'none';
             showProceedButton();
         }
 
@@ -559,37 +568,38 @@
             const portal = document.getElementById('registration-portal');
             gsap.to(transStage, { opacity: 0, duration: 1, onComplete: () => {
                 transStage.style.display = 'none';
-                portal.style.display = 'block';
+                portal.style.display = 'flex';
+                // UNLOCK BODY SCROLL ONLY AT REGISTRATION
+                document.body.style.overflow = 'auto';
+                document.documentElement.style.overflow = 'auto';
+                
                 gsap.to(portal, { opacity: 1, duration: 1 });
                 initSponsorSystem(); 
                 gsap.from(".form-element", { y: 20, opacity: 0, stagger: 0.1, duration: 0.6 });
             }});
         }
 
-        /**
-         * Dynamic Sponsor System Initializer
-         */
         function initSponsorSystem() {
             const marqueeInner = document.getElementById('marquee-inner');
             const dashboardContent = document.getElementById('sponsor-dashboard-content');
-            
-            // Flatten all sponsors for marquee
             const allSponsors = Object.values(sponsorConfig).flat();
             if (allSponsors.length === 0) return;
 
-            // 1. Build Marquee (Vertical Stack: Logo above Name)
-            // Duplicate for seamless loop
+            // Marquee Build
             const marqueeItems = [...allSponsors, ...allSponsors, ...allSponsors, ...allSponsors]; 
-            marqueeInner.innerHTML = marqueeItems.map(s => `
+            marqueeInner.innerHTML = marqueeItems.map(s => {
+                const scale = s.logoScale || 1.0;
+                const bg = s.boxGradient || 'rgba(255,255,255,0.02)';
+                return `
                 <div class="flex flex-col items-center gap-3 group">
-                    <div class="sponsor-logo-box">
-                        <img src="${s.logo}" alt="${s.name}" class="h-8 md:h-10 w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" onerror="this.src='https://via.placeholder.com/150x80/000000/FFFFFF?text=${s.name}'">
+                    <div class="sponsor-logo-box" style="background: ${bg}; width: ${220 * scale}px; height: ${100 * scale}px;">
+                        <img src="${s.logo}" alt="${s.name}" class="w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" style="height: ${40 * scale}px;" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=${s.name}'">
                     </div>
-                    <span class="text-[7px] md:text-[9px] font-black uppercase tracking-[3px] opacity-40 group-hover:opacity-100 transition-opacity text-center">${s.name}</span>
+                    <span class="text-[8px] md:text-[10px] font-black uppercase tracking-[3px] opacity-40 group-hover:opacity-100 transition-opacity text-center">${s.name}</span>
                 </div>
-            `).join('');
+            `}).join('');
 
-            // 2. Build Dashboard
+            // Dashboard Build
             dashboardContent.innerHTML = Object.entries(sponsorConfig).map(([tier, list]) => {
                 if (list.length === 0) return '';
                 return `
@@ -599,15 +609,18 @@
                             <div class="h-[1px] flex-grow bg-white/10"></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            ${list.map(s => `
-                                <div class="matte-surface p-8 md:p-10 flex flex-col items-center gap-4 group hover:border-white/30 transition-all duration-500 cursor-default">
-                                    <img src="${s.logo}" class="h-16 md:h-20 object-contain brightness-200 group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=${s.name}'">
+                            ${list.map(s => {
+                                const scale = s.logoScale || 1.0;
+                                const bg = s.boxGradient || 'linear-gradient(145deg, rgba(18,18,18,0.9), rgba(8,8,8,0.95))';
+                                return `
+                                <div class="matte-surface p-10 md:p-12 flex flex-col items-center gap-4 group hover:border-white/30 transition-all duration-500 cursor-default" style="background: ${bg};">
+                                    <img src="${s.logo}" class="object-contain brightness-200 group-hover:scale-110 transition-transform duration-500" style="height: ${80 * scale}px;" onerror="this.src='https://via.placeholder.com/250x120/000000/FFFFFF?text=${s.name}'">
                                     <div class="text-center">
                                         <p class="font-space font-black text-sm tracking-[4px] group-hover:text-white transition-colors uppercase">${s.name}</p>
                                         <p class="text-[9px] text-white/30 mt-2 leading-relaxed">${s.desc || ''}</p>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
                 `;
@@ -643,7 +656,6 @@
             glow.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
         });
 
-        // Add Member System
         const addButton = document.getElementById('add-member');
         const memberContainer = document.getElementById('additional-members');
         let count = 1;
@@ -684,8 +696,7 @@
                 })
                 .catch(() => { 
                     alert("Transmission Error."); 
-                    btn.disabled = false; 
-                    btn.innerHTML = "RETRY"; 
+                    btn.disabled = false; btn.innerHTML = "RETRY"; 
                 });
         });
     </script>
