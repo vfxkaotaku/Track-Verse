@@ -34,35 +34,44 @@
     <style>
         :root {
             --race-black: #030308;
-            --accent-glow: rgba(255, 255, 255, 0.2);
         }
 
         body, html {
             margin: 0; padding: 0;
-            background-color: var(--race-black);
+            background-color: var(--race-black); /* Fallback */
             color: white;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* --- Full Screen Adaptive Background SVG --- */
+        /* --- STACKING FIX: Background Elements --- */
         .master-bg {
-            position: fixed; inset: 0; z-index: -2;
+            position: fixed; inset: 0; 
+            z-index: 0; /* Above body, below content */
             background-image: url('background.svg'); 
             background-size: cover; 
             background-position: center;
             background-repeat: no-repeat; 
-            filter: brightness(0.3) saturate(0.6);
+            filter: brightness(0.35) saturate(0.7);
         }
 
         .bg-overlay {
-            position: fixed; inset: 0; z-index: -1;
-            background-color: rgba(3, 3, 8, 0.4);
-            background-image: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.6) 100%);
+            position: fixed; inset: 0; 
+            z-index: 1; 
+            background-image: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.5) 100%);
+            pointer-events: none;
         }
 
-        /* --- Global Persistent Header --- */
+        .sun-flare {
+            position: fixed; top: -10%; left: -10%; width: 45%; height: 45%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 50%, transparent 80%);
+            z-index: 2; pointer-events: none; filter: blur(100px);
+            animation: flare-drift 15s infinite alternate ease-in-out;
+        }
+        @keyframes flare-drift { from { opacity: 0.3; transform: scale(1); } to { opacity: 0.6; transform: scale(1.1); } }
+
+        /* --- Header --- */
         .branding-header {
             position: fixed; top: 0; left: 0; width: 100%; height: 70px;
             z-index: 2000; backdrop-filter: blur(15px);
@@ -85,21 +94,19 @@
             letter-spacing: 1px; color: white; margin-left: 4px;
         }
 
-        /* --- Ultra-Smooth Bloom Flare --- */
-        .sun-flare {
-            position: fixed; top: -10%; left: -10%; width: 40%; height: 40%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 50%, transparent 80%);
-            z-index: 1050; pointer-events: none; filter: blur(100px);
-            animation: flare-drift 15s infinite alternate ease-in-out;
+        /* --- Content Sections --- */
+        #intro-alpha, #motivation-stage, #transition-video-stage, #registration-portal {
+            position: fixed; inset: 0; display: none; opacity: 0;
+            z-index: 10; /* Everything above background layers */
         }
-        @keyframes flare-drift { from { opacity: 0.3; transform: scale(1); } to { opacity: 0.6; transform: scale(1.15); } }
+        #intro-alpha { z-index: 1100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: black; opacity: 1; }
+        #registration-portal { position: relative; z-index: 200; overflow-y: auto; padding-top: 100px; }
 
-        /* --- UI Elements --- */
         .matte-surface {
             position: relative;
-            background: linear-gradient(145deg, #121212, #080808);
-            box-shadow: 15px 15px 35px #000, -5px -5px 20px #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 32px;
+            background: linear-gradient(145deg, rgba(18,18,18,0.9), rgba(8,8,8,0.95));
+            box-shadow: 15px 15px 35px #000, -5px -5px 20px rgba(255,255,255,0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 32px;
         }
 
         .grain::after {
@@ -107,9 +114,15 @@
             opacity: 0.06; pointer-events: none; filter: url(#noiseFilter); z-index: 1;
         }
 
+        /* --- Reference Code Texture & Effects --- */
         .noise-texture {
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             background-repeat: repeat; background-size: 128px 128px; mix-blend-mode: overlay;
+        }
+
+        #glow-border {
+            background: radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1), transparent 80%);
+            pointer-events: none; mix-blend-mode: screen; z-index: 5;
         }
 
         .input-3d {
@@ -119,7 +132,7 @@
             transition: all 0.3s ease; outline: none;
         }
 
-        /* Responsive Cinematic Text Scaling */
+        /* Cinematic Text Scaling */
         .script-line {
             font-family: 'Syncopate', sans-serif;
             font-size: clamp(0.9rem, 4vw, 2.2rem); 
@@ -136,33 +149,16 @@
             filter: brightness(1.3); cursor: pointer;
         }
 
-        /* Spotlight System */
-        #glow-border {
-            background: radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1), transparent 80%);
-            pointer-events: none; mix-blend-mode: screen; z-index: 5;
-        }
-
-        /* Monochrome 3D Action Button */
         .btn-black-bold { font-weight: 900 !important; letter-spacing: 4px; text-transform: uppercase; }
         .btn-3d { transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease; }
         .btn-3d:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.15); }
 
-        /* Badge Logic */
         .workshop-badge {
             background: white; color: black; font-size: 8px; font-weight: 900;
             padding: 3px 8px; border-radius: 20px; letter-spacing: 1px;
             animation: badge-pulse 2s infinite; box-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
         @keyframes badge-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-
-        /* Stage Handling */
-        #intro-alpha, #motivation-stage, #transition-video-stage, #registration-portal {
-            position: fixed; inset: 0; display: none; opacity: 0;
-        }
-        #intro-alpha { z-index: 1100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: black; opacity: 1; }
-        #motivation-stage { z-index: 100; }
-        #transition-video-stage { z-index: 150; background: black; }
-        #registration-portal { position: relative; z-index: 200; overflow-y: auto; padding-top: 100px; }
 
         .central-clip-container {
             width: clamp(260px, 85vw, 800px); aspect-ratio: 16/9;
@@ -185,7 +181,6 @@
 
         .main-logo-top { width: clamp(140px, 50vw, 200px); height: auto; margin: 0 auto 30px; filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); mix-blend-mode: screen; }
 
-        /* Dashboard Slide Animation */
         #sponsor-modal {
             position: fixed; inset: 0; z-index: 3000;
             background: rgba(0,0,0,0.98); backdrop-filter: blur(30px);
@@ -220,7 +215,7 @@
         </filter>
     </svg>
 
-    <!-- Master Assets -->
+    <!-- Correct Background Stack -->
     <div class="master-bg"></div>
     <div class="bg-overlay"></div>
     <div class="sun-flare"></div>
@@ -233,7 +228,7 @@
         </div>
     </header>
 
-    <!-- PHASE 1: LOADING CLIP -->
+    <!-- PHASE 1 -->
     <div id="intro-alpha">
         <div class="central-clip-container mb-8">
             <video id="alpha-video" class="w-full h-full object-cover" autoplay muted playsinline>
@@ -243,7 +238,7 @@
         <div class="font-display font-bold text-[8px] md:text-xs tracking-[8px] md:tracking-[10px] flicker opacity-40 uppercase">System Sync Initializing</div>
     </div>
 
-    <!-- PHASE 2: MOTIVATION -->
+    <!-- PHASE 2 -->
     <div id="motivation-stage">
         <div class="relative h-full flex flex-col items-center justify-center p-6 text-center">
             <h1 class="script-line hover-glow" id="line-1">BUILD THE FUTURE.</h1>
@@ -256,7 +251,8 @@
                         <p class="text-[9px] font-bold tracking-[4px] uppercase text-zinc-500 flicker">Preparation Stage</p>
                         <span class="workshop-badge">FREE WORKSHOP</span>
                     </div>
-                    <img src="logo.png" alt="Logo" class="h-16 md:h-24 mx-auto mb-8 drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]">
+                    <!-- SVG Logo Link -->
+                    <img src="logo.svg" alt="Logo" class="h-16 md:h-24 mx-auto mb-8 drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]">
                     <p class="text-white/50 text-[10px] tracking-[6px] mb-6 uppercase font-black">Build • Program • Race</p>
                     <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4">Unlock expert robotics pathfinding logic in our <span class="text-white font-bold underline underline-offset-4">Free Technical Workshop</span> before the race.</p>
                 </div>
@@ -265,7 +261,7 @@
         </div>
     </div>
 
-    <!-- PHASE 2.5: TRANSITION -->
+    <!-- PHASE 2.5 -->
     <div id="transition-video-stage">
         <div class="relative w-full h-full flex items-center justify-center">
             <button onclick="skipVideo()" class="skip-btn uppercase">Skip Cinematic</button>
@@ -279,16 +275,19 @@
         </div>
     </div>
 
-    <!-- PHASE 3: PORTAL -->
+    <!-- PHASE 3 -->
     <div id="registration-portal">
         <div class="w-full max-w-2xl mx-auto px-4 mt-8 md:mt-20 pb-20">
-            <div class="flex justify-center mb-8"><img src="logo.png" alt="Logo" class="main-logo-top"></div>
+            <div class="flex justify-center mb-8">
+                <!-- SVG Logo Link -->
+                <img src="logo.svg" alt="Logo" class="main-logo-top">
+            </div>
 
             <div id="interactive-card" class="relative rounded-[32px] p-[1px] overflow-hidden group shadow-[0_0_60px_rgba(0,0,0,0.5)]">
                 <div id="glow-border" class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div class="relative bg-black/80 backdrop-blur-3xl rounded-[31px] p-6 md:p-10 border border-white/10 z-10 overflow-hidden grain">
-                    <div class="absolute inset-0 pointer-events-none noise-texture opacity-30 z-0"></div>
+                    <div class="absolute inset-0 pointer-events-none noise-texture opacity-20 z-0"></div>
                     <div class="relative z-10">
                         <div class="text-center mb-10 form-element">
                             <h2 class="font-space text-3xl md:text-5xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#cccccc] to-[#666666] uppercase hover-glow">TRACK VERSE</h2>
@@ -368,7 +367,7 @@
     <div id="sponsor-modal">
         <div class="max-w-4xl mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center mb-20 gap-8">
-                <h2 class="font-space text-3xl md:text-4xl font-black italic tracking-tighter uppercase hover-glow">Partners</h2>
+                <h2 class="font-space text-3xl md:text-4xl font-black italic tracking-tighter uppercase hover-glow">Partners Dashboard</h2>
                 <button onclick="closeSponsorModal()" class="close-badge-highlight uppercase">Close</button>
             </div>
             <div class="space-y-20">
@@ -376,7 +375,8 @@
                     <div class="flex items-center gap-4"><span class="tier-tag">TITLE SPONSOR</span> <div class="h-[1px] flex-grow bg-white/10"></div></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="matte-surface p-12 flex flex-col items-center gap-6 group hover:border-white/20 transition-all">
-                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=LOGO'">
+                            <!-- Correct Filename PLX(2).png -->
+                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=PLX+SOLAR'">
                             <span class="font-space font-black text-xl tracking-[8px] group-hover:text-white transition-colors uppercase">PLX SOLAR</span>
                         </div>
                     </div>
@@ -397,7 +397,7 @@
     </div>
 
     <script>
-        // Stage Management
+        // Smooth start
         document.addEventListener('DOMContentLoaded', () => {
             const alphaVideo = document.getElementById('alpha-video');
             const introTimer = setTimeout(proceedToMotivation, 4500);
@@ -470,17 +470,16 @@
         }
 
         function initMarquee() {
-            const partners = [{ name: "PLX SOLAR", logo: "PLX(2).png" }, { name: "TECHFEST", logo: "l1.png" }, { name: "INNOVATEX", logo: "l2.png" }, { name: "BUILDCO", logo: "l3.png" }];
+            const partners = [{ name: "PLX SOLAR", logo: "PLX(2).png" }];
             const container = document.getElementById('marquee-inner');
-            container.innerHTML = [...partners, ...partners, ...partners].map(p => `
+            container.innerHTML = [...partners, ...partners, ...partners, ...partners].map(p => `
                 <div class="sponsor-item-mini">
-                    <div class="sponsor-logo-box"><img src="${p.logo}" alt="${p.name}" class="h-8 md:h-10 w-auto brightness-200" onerror="this.src='https://via.placeholder.com/100x50/000000/FFFFFF?text=LOGO'"></div>
+                    <div class="sponsor-logo-box"><img src="${p.logo}" alt="${p.name}" class="h-8 w-auto brightness-200" onerror="this.src='https://via.placeholder.com/100x50/000000/FFFFFF?text=LOGO'"></div>
                     <span class="text-[7px] font-black uppercase tracking-[2px] opacity-40">${p.name}</span>
                 </div>
             `).join('');
         }
 
-        // Spotlight Logic
         const card = document.getElementById('interactive-card');
         const glow = document.getElementById('glow-border');
         card.addEventListener('mousemove', (e) => {
