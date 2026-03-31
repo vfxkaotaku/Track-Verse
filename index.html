@@ -107,7 +107,7 @@
             position: relative;
             background: linear-gradient(145deg, rgba(18,18,18,0.9), rgba(8,8,8,0.95));
             box-shadow: 15px 15px 35px #000, -5px -5px 20px rgba(255,255,255,0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 32px;
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 32px;
         }
 
         .grain::after {
@@ -155,7 +155,7 @@
 
         .workshop-badge {
             background: white; color: black; font-size: 8px; font-weight: 900;
-            padding: 3px 10px; border-radius: 20px; letter-spacing: 1px;
+            padding: 3px 12px; border-radius: 20px; letter-spacing: 1px;
             animation: badge-pulse 2s infinite; box-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
         @keyframes badge-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
@@ -247,9 +247,11 @@
 
             <div class="opacity-0 translate-y-12 transition-all duration-1000 flex flex-col items-center gap-6" id="workshop-cta">
                 <div class="matte-surface p-8 md:p-12 max-w-lg grain">
+                    <!-- Preparation Phase Layout Adjusted -->
                     <div class="flex flex-col items-center gap-4 mb-6">
                         <p class="text-[9px] font-bold tracking-[4px] uppercase text-zinc-500 flicker">Preparation Phase</p>
-                        <img src="prelogo.png" alt="Prep Phase Logo" class="h-16 md:h-20 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" onerror="this.style.display='none'">
+                        <!-- Updated logo path to textlogo.svg -->
+                        <img src="textlogo.svg" alt="Prep Stage Logo" class="h-14 md:h-20 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" onerror="this.src='https://via.placeholder.com/200x80/000000/FFFFFF?text=TEXT+LOGO'">
                         <span class="workshop-badge">FREE TECHNICAL WORKSHOP</span>
                     </div>
                     <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4">Master robotic optimization before competition begins. Access to workshop included with registration.</p>
@@ -263,6 +265,7 @@
     <div id="transition-video-stage">
         <div class="relative w-full h-full flex items-center justify-center">
             <button onclick="skipVideo()" class="skip-btn uppercase">Skip Cinematic</button>
+            <!-- Cinematic Asset Integrated -->
             <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline muted>
                 <source src="cinematic.webm" type="video/webm">
             </video>
@@ -291,7 +294,7 @@
                             <h2 class="font-space text-3xl md:text-5xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#cccccc] to-[#666666] uppercase hover-glow">TRACK VERSE</h2>
                             <p class="text-white/40 text-[10px] tracking-[4px] uppercase font-display">Identity Portal</p>
                             
-                            <!-- Moved Badge to independent position below subtitle -->
+                            <!-- Balanced Badge Position -->
                             <div class="mt-4 flex justify-center">
                                 <span class="workshop-badge">FREE WORKSHOP INCLUDED</span>
                             </div>
@@ -343,11 +346,12 @@
                                 </div>
                             </div>
 
+                            <!-- Payment Section Restored with QR -->
                             <div class="pt-6 border-t border-white/10">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface border border-white/10 rounded-2xl p-6">
                                     <div class="flex flex-col items-center justify-center space-y-4">
                                         <div class="bg-white p-2 rounded-xl">
-                                            <img src="payment-qr.jpg" alt="QR" class="w-28 h-28" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=9404458295@ybl'">
+                                            <img src="payment-qr.jpg" alt="Payment QR" class="w-28 h-28" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=9404458295@ybl'">
                                         </div>
                                         <div class="text-center">
                                             <p class="text-xs font-black text-white uppercase tracking-widest">Pay ₹200</p>
@@ -357,7 +361,7 @@
                                     </div>
                                     <div class="space-y-4 flex flex-col justify-center">
                                         <input type="text" id="transactionId" name="transactionId" required class="w-full input-3d rounded-xl py-3 px-4 text-white text-xs font-mono uppercase" placeholder="Transaction ID / UTR">
-                                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center relative overflow-hidden">
                                             <p class="text-[10px] text-white font-black uppercase mb-1">Workshop Entry</p>
                                             <p class="text-[9px] text-white/40">Includes Admission + Technical Training.</p>
                                         </div>
@@ -399,7 +403,7 @@
                     <div class="flex items-center gap-4"><span class="tier-tag">TITLE SPONSOR</span> <div class="h-[1px] flex-grow bg-white/10"></div></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="matte-surface p-12 flex flex-col items-center gap-6 group hover:border-white/20 transition-all">
-                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=LOGO'">
+                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/100x50/000000/FFFFFF?text=LOGO'">
                             <span class="font-space font-black text-xl tracking-[8px] group-hover:text-white transition-colors uppercase">PLX SOLAR</span>
                         </div>
                     </div>
