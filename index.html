@@ -453,23 +453,38 @@
     <script>
         /**
          * ============================================================
-         * SPONSOR MANAGEMENT SYSTEM (GITHUB FOLDER STRUCTURE)
+         * SPONSOR MANAGEMENT SYSTEM (EASY ADD)
          * ============================================================
-         * logoScale: Adjust size by multiplier (1.0 = original, 1.5 = 150%)
-         * boxGradient: CSS background property (solid color or gradient)
+         * To add more, just copy an object like { name: "...", logo: "..." }
+         * and paste it inside the square brackets [ ] of the correct tier.
          */
         const sponsorConfig = {
             "TITLE SPONSOR": [
-                { 
+                /*{ 
                     name: "PLX SOLAR", 
                     logo: "sponsor/title/PLX(2).png", 
                     desc: "Energy & Infrastructure Partner",
                     logoScale: 1.6, 
                     boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))"
-                }
+                }*/
+                // Paste more Title Sponsors here...
             ],
             "GOLD PARTNER": [
-                // Add gold partners here...
+                /*{ 
+                    name: "GOLD SPONSOR 1", 
+                    logo: "sponsor/gold/logo1.png", 
+                    desc: "Technical Partner",
+                    logoScale: 1.2, 
+                    boxGradient: "rgba(255, 215, 0, 0.03)"
+                },
+                { 
+                    name: "GOLD SPONSOR 2", 
+                    logo: "sponsor/gold/logo2.png", 
+                    desc: "Resource Partner",
+                    logoScale: 1.2, 
+                    boxGradient: "rgba(255, 215, 0, 0.03)"
+                }*/
+                // Paste more Gold Partners here...
             ],
             "SILVER PARTNER": [
                 { 
@@ -478,10 +493,24 @@
                     desc: "Energy & Infrastructure Partner",
                     logoScale: 1.6, // 160% size
                     boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))"
+                },
+                  { 
+                    name: "VKO Studio", 
+                    logo: "sponsor/silver/vko.svg", 
+                    desc: "Designing Partner",
+                    logoScale: 1.6, // 160% size
+                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))"
                 }
-        
+               /* { 
+                    name: "SILVER SPONSOR 2", 
+                    logo: "sponsor/silver/logo2.png", 
+                    desc: "Support Partner",
+                    logoScale: 1.0, 
+                    boxGradient: "rgba(192, 192, 192, 0.03)"
+                }*/
+                
+                // Paste more Silver Partners here...
             ]
-           
         };
 
         let motivationTimeline;
@@ -505,7 +534,6 @@
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
                     });
                     motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
-                        // Cleanup skip arrow
                         gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5 });
                     }});
                     motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
@@ -513,15 +541,10 @@
             }
         });
 
-        // FIXED SKIP FUNCTION TO PREVENT OVERLAPPING GLITCH
         function skipMotivationSequence() {
             if (motivationTimeline) {
-                motivationTimeline.kill(); // Stop all existing animations immediately
-                
-                // Reset all motivational lines to hidden
+                motivationTimeline.kill(); 
                 gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0, y: -30 });
-                
-                // Instant switch to Preparation Phase
                 gsap.set("#workshop-cta", { opacity: 1, y: 0 });
                 gsap.set("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none' });
             }
@@ -573,7 +596,6 @@
             gsap.to(transStage, { opacity: 0, duration: 1, onComplete: () => {
                 transStage.style.display = 'none';
                 portal.style.display = 'flex';
-                // UNLOCK SCROLLING ONLY NOW
                 document.body.style.overflow = 'auto';
                 document.documentElement.style.overflow = 'auto';
                 
