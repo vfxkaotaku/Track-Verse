@@ -45,13 +45,14 @@
             min-height: 100vh;
         }
 
-        /* --- Master Background Layers --- */
+        /* --- BACKGROUND ADJUSTMENTS --- */
         .master-bg {
             position: fixed; inset: 0; 
             z-index: 0;
             background-image: url('background.svg'); 
-            background-size: cover; 
-            background-position: center;
+            /* Changed from cover to 100% 100% to fit exactly without zooming */
+            background-size: 100% 100%; 
+            background-position: center top;
             background-repeat: no-repeat; 
             filter: brightness(0.3) saturate(0.6);
         }
@@ -165,7 +166,6 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- Loader Circle --- */
         .video-loader {
             width: 40px; height: 40px;
             border: 3px solid rgba(255,255,255,0.1);
@@ -355,7 +355,6 @@
                                 </div>
                             </div>
 
-                            <!-- Payment Section -->
                             <div class="pt-6 border-t border-white/10">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface border border-white/10 rounded-2xl p-6">
                                     <div class="flex flex-col items-center justify-center space-y-4">
@@ -412,7 +411,7 @@
                     <div class="flex items-center gap-4"><span class="tier-tag">TITLE SPONSOR</span> <div class="h-[1px] flex-grow bg-white/10"></div></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="matte-surface p-12 flex flex-col items-center gap-6 group hover:border-white/20 transition-all">
-                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=LOGO'">
+                            <img src="PLX(2).png" class="h-24 object-contain brightness-200" onerror="this.src='https://via.placeholder.com/100x50/000000/FFFFFF?text=LOGO'">
                             <span class="font-space font-black text-xl tracking-[8px] group-hover:text-white transition-colors uppercase">PLX SOLAR</span>
                         </div>
                     </div>
@@ -433,7 +432,7 @@
     </div>
 
     <script>
-        // Cinematic Sequence Logic
+        // Stage Management
         document.addEventListener('DOMContentLoaded', () => {
             const alphaVideo = document.getElementById('alpha-video');
             const introTimer = setTimeout(proceedToMotivation, 4500);
@@ -466,7 +465,6 @@
                 transStage.style.display = 'block';
                 gsap.to(transStage, { opacity: 1, duration: 1 });
 
-                // Load handling
                 if(video.readyState >= 3) {
                     loader.style.display = 'none';
                     video.muted = false;
@@ -495,8 +493,8 @@
             const loader = document.getElementById('cinematic-loader');
             
             video.pause();
-            skipBtn.style.display = 'none'; // Disappear Skip button
-            loader.style.display = 'none';  // Hide loader if skip clicked
+            skipBtn.style.display = 'none';
+            loader.style.display = 'none';
             showProceedButton();
         }
 
@@ -552,7 +550,7 @@
             glow.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
         });
 
-        // Add Member System
+        // Add Member
         const addButton = document.getElementById('add-member');
         const memberContainer = document.getElementById('additional-members');
         let count = 1;
