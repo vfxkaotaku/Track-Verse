@@ -45,7 +45,7 @@
             min-height: 100vh;
         }
 
-        /* --- STACKING FIX: Background Elements --- */
+        /* --- Master Background Layers --- */
         .master-bg {
             position: fixed; inset: 0; 
             z-index: 0;
@@ -63,7 +63,6 @@
             pointer-events: none;
         }
 
-        /* Anti-Pixelated Smooth Bloom Flare */
         .sun-flare {
             position: fixed; top: -10%; left: -10%; width: 50%; height: 50%;
             background: radial-gradient(circle at center, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 50%, transparent 80%);
@@ -132,7 +131,6 @@
             transition: all 0.3s ease; outline: none;
         }
 
-        /* Cinematic Text Scaling */
         .script-line {
             font-family: 'Syncopate', sans-serif;
             font-size: clamp(0.85rem, 3.5vw, 1.8rem); 
@@ -155,7 +153,7 @@
 
         .workshop-badge {
             background: white; color: black; font-size: 8px; font-weight: 900;
-            padding: 3px 12px; border-radius: 20px; letter-spacing: 1px;
+            padding: 3px 10px; border-radius: 20px; letter-spacing: 1px;
             animation: badge-pulse 2s infinite; box-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
         @keyframes badge-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
@@ -215,7 +213,7 @@
         </filter>
     </svg>
 
-    <!-- Background Layer Stack -->
+    <!-- Master Layer Stack -->
     <div class="master-bg"></div>
     <div class="bg-overlay"></div>
     <div class="sun-flare"></div>
@@ -238,7 +236,7 @@
         <div class="font-display font-bold text-[8px] md:text-xs tracking-[8px] md:tracking-[10px] flicker opacity-40 uppercase">System Initializing</div>
     </div>
 
-    <!-- PHASE 2: MOTIVATION -->
+    <!-- PHASE 2: MOTIVATIONAL SEQUENCE -->
     <div id="motivation-stage">
         <div class="relative h-full flex flex-col items-center justify-center p-6 text-center">
             <h1 class="script-line hover-glow" id="line-1">BUILD THE FUTURE.</h1>
@@ -246,27 +244,24 @@
             <h1 class="script-line hover-glow" id="line-3">RACE FOR GLORY.</h1>
 
             <div class="opacity-0 translate-y-12 transition-all duration-1000 flex flex-col items-center gap-6" id="workshop-cta">
-                <div class="matte-surface p-8 md:p-12 max-w-lg grain">
-                    <!-- Preparation Phase Layout Adjusted -->
-                    <div class="flex flex-col items-center gap-4 mb-6">
-                        <p class="text-[9px] font-bold tracking-[4px] uppercase text-zinc-500 flicker">Preparation Phase</p>
-                        <!-- Updated logo path to textlogo.svg -->
-                        <img src="textlogo.svg" alt="Prep Stage Logo" class="h-14 md:h-20 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]" onerror="this.src='https://via.placeholder.com/200x80/000000/FFFFFF?text=TEXT+LOGO'">
-                        <span class="workshop-badge">FREE TECHNICAL WORKSHOP</span>
+                <div class="matte-surface p-10 md:p-14 max-w-xl grain">
+                    <div class="flex flex-col items-center gap-2 mb-10">
+                        <p class="text-[10px] font-bold tracking-[4px] uppercase text-zinc-500 flicker -mb-2">Preparation Phase</p>
+                        <img src="textlogo.svg" alt="Prep Stage Logo" class="h-28 md:h-44 drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]" onerror="this.src='https://via.placeholder.com/400x150/000000/FFFFFF?text=TEXT+LOGO'">
                     </div>
-                    <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4">Master robotic optimization before competition begins. Access to workshop included with registration.</p>
+                    <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4">Master robotic optimization before competition begins. Full technical briefing sessions are conducted during the induction phase.</p>
                 </div>
                 <button class="bg-white text-black font-display btn-black-bold px-12 py-5 md:px-14 md:py-6 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-105 transition-transform shadow-2xl uppercase" onclick="startTransitionVideo()">Enter Arena</button>
             </div>
         </div>
     </div>
 
-    <!-- PHASE 2.5: CINEMATIC -->
+    <!-- PHASE 2.5: CINEMATIC CLIP (AUDIO ENABLED) -->
     <div id="transition-video-stage">
         <div class="relative w-full h-full flex items-center justify-center">
             <button onclick="skipVideo()" class="skip-btn uppercase">Skip Cinematic</button>
-            <!-- Cinematic Asset Integrated -->
-            <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline muted>
+            <!-- Removed 'muted' attribute to enable sound -->
+            <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline>
                 <source src="cinematic.webm" type="video/webm">
             </video>
             <div id="proceed-btn-container" class="absolute bottom-24 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none">
@@ -294,7 +289,6 @@
                             <h2 class="font-space text-3xl md:text-5xl font-black tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#ffffff] via-[#cccccc] to-[#666666] uppercase hover-glow">TRACK VERSE</h2>
                             <p class="text-white/40 text-[10px] tracking-[4px] uppercase font-display">Identity Portal</p>
                             
-                            <!-- Balanced Badge Position -->
                             <div class="mt-4 flex justify-center">
                                 <span class="workshop-badge">FREE WORKSHOP INCLUDED</span>
                             </div>
@@ -346,7 +340,6 @@
                                 </div>
                             </div>
 
-                            <!-- Payment Section Restored with QR -->
                             <div class="pt-6 border-t border-white/10">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-surface border border-white/10 rounded-2xl p-6">
                                     <div class="flex flex-col items-center justify-center space-y-4">
@@ -361,7 +354,7 @@
                                     </div>
                                     <div class="space-y-4 flex flex-col justify-center">
                                         <input type="text" id="transactionId" name="transactionId" required class="w-full input-3d rounded-xl py-3 px-4 text-white text-xs font-mono uppercase" placeholder="Transaction ID / UTR">
-                                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center relative overflow-hidden">
+                                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
                                             <p class="text-[10px] text-white font-black uppercase mb-1">Workshop Entry</p>
                                             <p class="text-[9px] text-white/40">Includes Admission + Technical Training.</p>
                                         </div>
@@ -454,6 +447,7 @@
                 transStage.style.display = 'block';
                 gsap.to(transStage, { opacity: 1, duration: 1 });
                 const video = document.getElementById('trans-vid-asset');
+                video.muted = false; // Ensure sound is on
                 video.play();
                 video.onended = showProceedButton;
             }});
@@ -500,7 +494,7 @@
         function initMarquee() {
             const partners = [{ name: "PLX SOLAR", logo: "PLX(2).png" }];
             const container = document.getElementById('marquee-inner');
-            container.innerHTML = [...partners, ...partners, ...partners, ...partners].map(p => `
+            container.innerHTML = partners.map(p => `
                 <div class="sponsor-item-mini">
                     <div class="sponsor-logo-box"><img src="${p.logo}" alt="${p.name}" class="h-8 md:h-10 w-auto brightness-200" onerror="this.src='https://via.placeholder.com/100x50/000000/FFFFFF?text=LOGO'"></div>
                     <span class="text-[7px] font-black uppercase tracking-[2px] opacity-40">${p.name}</span>
@@ -515,7 +509,6 @@
             setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i>', 2000);
         }
 
-        // Spotlight Follower
         const card = document.getElementById('interactive-card');
         const glow = document.getElementById('glow-border');
         card.addEventListener('mousemove', (e) => {
