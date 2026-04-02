@@ -187,7 +187,7 @@
         .skip-btn {
             position: absolute; bottom: 40px; right: 40px; z-index: 1000;
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-blur: 15px; color: white; padding: 12px 28px; border-radius: 100px;
+            backdrop-filter: blur(15px); color: white; padding: 12px 28px; border-radius: 100px;
             font-size: 10px; letter-spacing: 3px; font-weight: 900; transition: 0.4s;
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -241,6 +241,73 @@
         
         .hardware-grid label { cursor: pointer; }
         .hardware-grid input:checked + .hardware-box { border-color: white; background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+
+        /* Rule Panel Styling */
+        .rules-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -55%);
+            width: clamp(300px, 95vw, 600px);
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 25px 30px;
+            z-index: 1005;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            display: none;
+            opacity: 0;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+            font-size: 10px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.4;
+        }
+        .rule-item i {
+            color: white;
+            font-size: 8px;
+            margin-top: 4px;
+        }
+
+        /* Track Reference Images */
+        .track-ref-container {
+            display: grid;
+            grid-template-cols: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .track-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 12px;
+            text-align: center;
+        }
+        .track-img-box {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #000;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .track-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body class="grain">
@@ -315,11 +382,55 @@
             <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline>
                 <source src="cinematic.webm" type="video/webm">
             </video>
-            <div id="proceed-btn-container" class="absolute bottom-24 left-1/2 -translate-x-1/2 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001]">
-                <button onclick="openPortal()" class="bg-white text-black font-display btn-black-bold px-12 py-5 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.5)] uppercase">
-                    Proceed to Registration
+
+            <!-- Mission Briefing Panel -->
+            <div id="rules-briefing" class="rules-panel">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                        <i class="fa-solid fa-map text-[10px]"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-[10px] tracking-[3px] uppercase">Arena Briefing</h3>
+                </div>
+                
+                <p class="text-[9px] text-white/50 uppercase tracking-[2px] mb-4">Phase 1: Tune your robots on the Trial Track before the competitive run.</p>
+
+                <!-- Track Visuals -->
+                <div class="track-ref-container">
+                    <div class="track-card">
+                        <div class="track-img-box">
+                            <img id="trial-track-img" src="trial-track.jpg" alt="Trial Track" onerror="this.src='https://via.placeholder.com/300x300/000000/FFFFFF?text=TRIAL+TRACK'">
+                        </div>
+                        <p class="text-[8px] font-black tracking-widest uppercase">Trial Track</p>
+                        <p class="text-[7px] text-white/30 uppercase mt-1">Calibration Zone</p>
+                    </div>
+                    <div class="track-card">
+                        <div class="track-img-box">
+                            <img id="main-track-img" src="main-track.jpg" alt="Main Track" onerror="this.src='https://via.placeholder.com/300x300/000000/FFFFFF?text=MAIN+TRACK'">
+                        </div>
+                        <p class="text-[8px] font-black tracking-widest uppercase text-white">Main Event</p>
+                        <p class="text-[7px] text-white/30 uppercase mt-1">Championship Path</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-1 mb-6">
+                    <div class="rule-item"><i class="fa-solid fa-check"></i><span>Trial Track access is open for 15 mins per team.</span></div>
+                    <div class="rule-item"><i class="fa-solid fa-check"></i><span>Fully autonomous operation - No manual overrides.</span></div>
+                    <div class="rule-item"><i class="fa-solid fa-check"></i><span>Main event track consists of loops, 90° turns, and curves.</span></div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-4">
+                    <span class="workshop-badge mb-2 inline-block">FREE WORKSHOP</span>
+                    <p class="font-space font-black text-[10px] uppercase tracking-wider">Robot Building Intensive</p>
+                    <p class="text-[8px] text-white/40 leading-relaxed mt-1">Learn to calibrate sensors for these specific track layouts. Hardware provided.</p>
+                </div>
+
+                <!-- Registration Button (In-Panel) -->
+                <button onclick="openPortal()" class="w-full bg-white text-black font-display btn-black-bold py-4 rounded-full text-[9px] tracking-[4px] hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(255,255,255,0.3)] uppercase mb-2">
+                    Accept Mission & Register
                 </button>
             </div>
+
+            <div id="proceed-btn-container" class="absolute bottom-24 left-1/2 -translate-x-1/2 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001]"></div>
         </div>
     </div>
 
@@ -452,14 +563,6 @@
     </div>
 
     <script>
-        /**
-         * ============================================================
-         * SPONSOR MANAGEMENT SYSTEM (GITHUB FOLDER STRUCTURE)
-         * ============================================================
-         * To add/edit sponsors:
-         * logoScale: 1.0 is default. 1.5 is 50% larger, 2.0 is double size.
-         * boxGradient: Set any CSS color or gradient for the background box.
-         */
         const sponsorConfig = {
             "TITLE SPONSOR": [  
                 { 
@@ -469,22 +572,6 @@
                     logoScale: 1.4, 
                     boxGradient: "rgba(255, 255, 255, 0.05)"
                 }
-               /* { 
-                    name: "PLX SOLAR", 
-                    logo: "sponsor/title/PLX(2).png", 
-                    desc: "Energy & Infrastructure Partner",
-                    logoScale: 1.6, 
-                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))"
-                }*/
-            ],
-            "GOLD PARTNER": [
-               /* { 
-                    name: "GOLD PARTNER 1", 
-                    logo: "sponsor/gold/logo.png", 
-                    desc: "Technical Support",
-                    logoScale: 1.2, 
-                    boxGradient: "rgba(255, 215, 0, 0.05)"
-                }*/
             ],
             "SILVER PARTNER": [
                 { 
@@ -514,7 +601,6 @@
                     
                     motivationTimeline = gsap.timeline({
                         onComplete: () => {
-                            // Automatically hide skip arrow when sequence finishes naturally
                             gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
                                 document.getElementById("skip-cinematic-arrow").style.display = 'none';
                             }});
@@ -526,7 +612,6 @@
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
                     });
                     motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
-                        // Hide skip arrow when preparation button begins to appear
                         gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
                             document.getElementById("skip-cinematic-arrow").style.display = 'none';
                         }});
@@ -541,7 +626,6 @@
                 motivationTimeline.kill(); 
                 gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0, y: -30, display: 'none' });
                 gsap.set("#workshop-cta", { opacity: 1, y: 0, clearProps: "transform" });
-                // Instantly remove skip trigger
                 gsap.set("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', display: 'none' });
             }
         }
@@ -573,14 +657,13 @@
         }
 
         function showProceedButton() {
-            const btn = document.getElementById('proceed-btn-container');
             const skipBtn = document.getElementById('skip-btn-el');
+            const rules = document.getElementById('rules-briefing');
             
-            // Hide skip button when video finishes
             gsap.to(skipBtn, { opacity: 0, duration: 0.5, onComplete: () => skipBtn.style.display = 'none' });
             
-            btn.classList.remove('pointer-events-none');
-            gsap.to(btn, { opacity: 1, y: 0, duration: 1 });
+            rules.style.display = 'block';
+            gsap.to(rules, { opacity: 1, y: '-55%', duration: 1.2, ease: "power4.out" });
         }
 
         function skipVideo() {
