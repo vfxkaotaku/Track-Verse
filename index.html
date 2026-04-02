@@ -242,96 +242,48 @@
         .hardware-grid label { cursor: pointer; }
         .hardware-grid input:checked + .hardware-box { border-color: white; background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
 
-        /* Rule Panel Styling - Enhanced Responsiveness */
+        /* Rule Panel Styling - Centered & Responsive */
         .rules-panel {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%); 
-            width: clamp(280px, 92vw, 650px);
+            width: clamp(280px, 92vw, 600px);
             background: rgba(8, 8, 12, 0.96);
             backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 32px;
-            padding: clamp(20px, 5vw, 40px);
+            padding: clamp(25px, 6vw, 45px);
             z-index: 1005;
             box-shadow: 0 40px 120px rgba(0,0,0,0.95);
             display: none;
             opacity: 0;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.1) transparent;
         }
         .rule-item {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 10px;
-            font-size: clamp(9px, 2.5vw, 11px);
-            color: rgba(255,255,255,0.7);
-            line-height: 1.5;
+            gap: 14px;
+            margin-bottom: 12px;
+            font-size: clamp(10px, 2.5vw, 12px);
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
         }
         .rule-item i {
-            color: white;
-            font-size: 9px;
-            margin-top: 4px;
+            color: #fff;
+            font-size: 10px;
+            margin-top: 5px;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
         }
-
-        /* Track Reference Layout */
-        .track-ref-container {
-            display: grid;
-            grid-template-cols: 1fr;
-            gap: 20px;
-            margin: 25px 0;
-        }
-        @media (min-width: 500px) {
-            .track-ref-container { grid-template-cols: 1fr 1fr; }
-        }
-
-        .track-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
-            padding: 16px;
-            text-align: center;
-            transition: border-color 0.3s;
-        }
-        .track-card:hover { border-color: rgba(255,255,255,0.2); }
-
-        .track-img-box {
-            width: 100%;
-            aspect-ratio: 4/3;
-            background: #000;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-        }
-        .track-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .track-title {
+        .protocol-tag {
             font-family: 'Syncopate', sans-serif;
             font-size: 8px;
-            font-weight: 700;
-            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 4px;
-            color: white;
-        }
-        .ref-note {
-            font-size: 7px;
-            color: rgba(255,255,255,0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
+            margin-bottom: 20px;
+            display: block;
         }
     </style>
 </head>
@@ -407,45 +359,41 @@
                 <source src="cinematic.webm" type="video/webm">
             </video>
 
-            <!-- Mission Briefing Panel -->
+            <!-- Rules & Mission Briefing Panel (No Images) -->
             <div id="rules-briefing" class="rules-panel">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                        <i class="fa-solid fa-robot text-[10px]"></i>
-                    </div>
-                    <h3 class="font-display font-bold text-[10px] tracking-[3px] uppercase">Mission Protocol</h3>
-                </div>
+                <span class="protocol-tag">System Mission Briefing</span>
                 
-                <p class="text-[9px] text-white/50 uppercase tracking-[2px] mb-4">Tactical Phase: Calibrate and tune your hardware on the Trial Track prior to the main engagement.</p>
-
-                <!-- Track Reference Section -->
-                <div class="track-ref-container">
-                    <div class="track-card">
-                        <h4 class="track-title text-blue-400/80">Trial Calibration</h4>
-                        <div class="track-img-box">
-                            <img id="trial-track-img" src="trial-track.jpg" alt="Trial Track" onerror="this.src='https://via.placeholder.com/400x300/000000/FFFFFF?text=CALIBRATION+TRACK'">
-                        </div>
-                        <p class="ref-note">Visual Reference Only</p>
-                    </div>
-                    <div class="track-card">
-                        <h4 class="track-title text-white">Championship Circuit</h4>
-                        <div class="track-img-box">
-                            <img id="main-track-img" src="main-track.jpg" alt="Main Track" onerror="this.src='https://via.placeholder.com/400x300/000000/FFFFFF?text=MAIN+EVENT+TRACK'">
-                        </div>
-                        <p class="ref-note">Visual Reference Only</p>
-                    </div>
-                </div>
+                <h3 class="font-display font-bold text-lg md:text-xl tracking-[4px] uppercase mb-6 text-white">Event Protocols</h3>
                 
-                <div class="space-y-2 mb-8">
-                    <div class="rule-item"><i class="fa-solid fa-caret-right"></i><span>Trial Track access is restricted to 15 mins per team for sensor tuning.</span></div>
-                    <div class="rule-item"><i class="fa-solid fa-caret-right"></i><span>Robots must be fully autonomous. Remote interference is prohibited.</span></div>
-                    <div class="rule-item"><i class="fa-solid fa-caret-right"></i><span>Course includes intersections, loops, and sharp technical turns.</span></div>
+                <div class="space-y-4 mb-10">
+                    <div class="rule-item">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span><strong>Dual Track System:</strong> Participants will have access to two tracks. The <strong>Trial Track</strong> is designated for robot tuning and sensor calibration. The <strong>Championship Circuit</strong> is for final racing.</span>
+                    </div>
+                    <div class="rule-item">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span><strong>Calibration Phase:</strong> You must tune your robots on the trial track before the official race begins to ensure hardware stability.</span>
+                    </div>
+                    <div class="rule-item">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span><strong>Autonomous Control:</strong> Robots must operate 100% autonomously. Any external manual intervention will result in immediate disqualification.</span>
+                    </div>
+                    <div class="rule-item">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span><strong>Technical Specs:</strong> Bots must adhere to the 20cm x 20cm dimension limits and must not damage the arena surface.</span>
+                    </div>
                 </div>
 
-                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8">
-                    <span class="workshop-badge mb-2 inline-block">BONUS CONTENT</span>
-                    <p class="font-space font-black text-[11px] uppercase tracking-wider text-white">Free Robot Building Workshop</p>
-                    <p class="text-[9px] text-white/40 leading-relaxed mt-1">Included with registration. Master the logic behind PID controllers and high-speed line detection.</p>
+                <!-- Featured Workshop -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="workshop-badge">INCLUDED</span>
+                        <i class="fa-solid fa-graduation-cap text-white/40"></i>
+                    </div>
+                    <h4 class="font-space font-black text-sm uppercase tracking-wider text-white">Free Robot Building Workshop</h4>
+                    <p class="text-[10px] text-white/50 leading-relaxed mt-2">
+                        Gain deep insights into motor drivers, sensor arrays, and track logic. This session is provided free of charge for all registered participants to level up their competitive edge.
+                    </p>
                 </div>
 
                 <button onclick="openPortal()" class="w-full bg-white text-black font-display btn-black-bold py-5 rounded-full text-[10px] tracking-[4px] hover:scale-[1.02] transition-transform shadow-[0_0_30px_rgba(255,255,255,0.4)] uppercase">
