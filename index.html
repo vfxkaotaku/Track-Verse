@@ -242,20 +242,20 @@
         .hardware-grid label { cursor: pointer; }
         .hardware-grid input:checked + .hardware-box { border-color: white; background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
 
-        /* Rule Panel Styling - Centered & Responsive */
+        /* Rule Panel Styling - FIXED FOR RESPONSE & POSITIONING */
         .rules-panel {
-            position: absolute;
+            position: fixed; /* Fix to viewport to ensure centering */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%); 
             width: clamp(280px, 92vw, 600px);
-            background: rgba(8, 8, 12, 0.96);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(8, 8, 12, 0.98);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 32px;
             padding: clamp(25px, 6vw, 45px);
-            z-index: 1005;
-            box-shadow: 0 40px 120px rgba(0,0,0,0.95);
+            z-index: 2500; /* Higher than the header (2000) */
+            box-shadow: 0 40px 120px rgba(0,0,0,0.95), 0 0 40px rgba(255,255,255,0.05);
             display: none;
             opacity: 0;
             max-height: 85vh;
@@ -355,11 +355,11 @@
                 <span class="text-[9px] tracking-[3px] opacity-40 uppercase font-black">Syncing Stream...</span>
             </div>
             <button id="skip-btn-el" onclick="skipVideo()" class="skip-btn uppercase">Skip</button>
-            <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline>
+            <video id="trans-vid-asset" class="w-full h-full object-contain transition-all duration-700" playsinline>
                 <source src="cinematic.webm" type="video/webm">
             </video>
 
-            <!-- Rules & Mission Briefing Panel (No Images) -->
+            <!-- Rules & Mission Briefing Panel (Centered & Overlapping Header) -->
             <div id="rules-briefing" class="rules-panel">
                 <span class="protocol-tag">System Mission Briefing</span>
                 
@@ -618,13 +618,17 @@
         function showProceedButton() {
             const skipBtn = document.getElementById('skip-btn-el');
             const rules = document.getElementById('rules-briefing');
+            const video = document.getElementById('trans-vid-asset');
             
             gsap.to(skipBtn, { opacity: 0, duration: 0.5, onComplete: () => skipBtn.style.display = 'none' });
             
+            // Blur and Dim the background video when rules appear
+            gsap.to(video, { filter: "blur(20px) brightness(0.4)", duration: 1.5 });
+
             rules.style.display = 'block';
             gsap.fromTo(rules, 
-                { opacity: 0, y: 60 }, 
-                { opacity: 1, y: 0, duration: 1, ease: "power4.out" }
+                { opacity: 0, y: 50, scale: 0.95 }, 
+                { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power4.out" }
             );
         }
 
@@ -642,8 +646,12 @@
         function openPortal() {
             const transStage = document.getElementById('transition-video-stage');
             const portal = document.getElementById('registration-portal');
-            gsap.to(transStage, { opacity: 0, duration: 1, onComplete: () => {
+            const rules = document.getElementById('rules-briefing');
+
+            // Fade out rules and stage
+            gsap.to([transStage, rules], { opacity: 0, duration: 1, onComplete: () => {
                 transStage.style.display = 'none';
+                rules.style.display = 'none';
                 portal.style.display = 'flex';
                 document.body.style.overflow = 'auto';
                 document.documentElement.style.overflow = 'auto';
@@ -667,7 +675,7 @@
                 return `
                 <div class="flex flex-col items-center gap-3 group">
                     <div class="sponsor-logo-box" style="background: ${bg}; width: ${220 * scale}px; height: ${100 * scale}px;">
-                        <img src="${s.logo}" alt="${s.name}" class="w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" style="height: ${40 * scale}px;" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=${s.name}'">
+                        <img src="${s.logo}" alt="${s.name}" class="w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" style="height: ${40 * scale}px;" onerror="this.src='https://via.placeholder.com/220x100/000000/FFFFFF?text=${s.name}'">
                     </div>
                     <span class="text-[8px] md:text-[10px] font-black uppercase tracking-[3px] opacity-40 group-hover:opacity-100 transition-opacity text-center">${s.name}</span>
                 </div>
