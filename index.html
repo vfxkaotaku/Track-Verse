@@ -187,7 +187,7 @@
         .skip-btn {
             position: absolute; bottom: 40px; right: 40px; z-index: 1000;
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px); color: white; padding: 12px 28px; border-radius: 100px;
+            backdrop-blur: 15px; color: white; padding: 12px 28px; border-radius: 100px;
             font-size: 10px; letter-spacing: 3px; font-weight: 900; transition: 0.4s;
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -241,50 +241,6 @@
         
         .hardware-grid label { cursor: pointer; }
         .hardware-grid input:checked + .hardware-box { border-color: white; background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
-
-        /* Rule Panel Styling - FIXED FOR RESPONSE & POSITIONING */
-        .rules-panel {
-            position: fixed; /* Fix to viewport to ensure centering */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); 
-            width: clamp(280px, 92vw, 600px);
-            background: rgba(8, 8, 12, 0.98);
-            backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 32px;
-            padding: clamp(25px, 6vw, 45px);
-            z-index: 2500; /* Higher than the header (2000) */
-            box-shadow: 0 40px 120px rgba(0,0,0,0.95), 0 0 40px rgba(255,255,255,0.05);
-            display: none;
-            opacity: 0;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        .rule-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            margin-bottom: 12px;
-            font-size: clamp(10px, 2.5vw, 12px);
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-        }
-        .rule-item i {
-            color: #fff;
-            font-size: 10px;
-            margin-top: 5px;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
-        }
-        .protocol-tag {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 8px;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            display: block;
-        }
     </style>
 </head>
 <body class="grain">
@@ -336,6 +292,7 @@
                 <button class="bg-white text-black font-display btn-black-bold px-12 py-5 md:px-14 md:py-6 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-105 transition-transform shadow-2xl uppercase" onclick="startTransitionVideo()">Enter Arena</button>
             </div>
 
+            <!-- Skip Cinematic Arrow -->
             <div id="skip-cinematic-arrow" class="skip-arrow-trigger" onclick="skipMotivationSequence()">
                 <div class="arrow-set">
                     <i class="fa-solid fa-chevron-right"></i>
@@ -355,53 +312,14 @@
                 <span class="text-[9px] tracking-[3px] opacity-40 uppercase font-black">Syncing Stream...</span>
             </div>
             <button id="skip-btn-el" onclick="skipVideo()" class="skip-btn uppercase">Skip</button>
-            <video id="trans-vid-asset" class="w-full h-full object-contain transition-all duration-700" playsinline>
+            <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline>
                 <source src="cinematic.webm" type="video/webm">
             </video>
-
-            <!-- Rules & Mission Briefing Panel (Centered & Overlapping Header) -->
-            <div id="rules-briefing" class="rules-panel">
-                <span class="protocol-tag">System Mission Briefing</span>
-                
-                <h3 class="font-display font-bold text-lg md:text-xl tracking-[4px] uppercase mb-6 text-white">Event Protocols</h3>
-                
-                <div class="space-y-4 mb-10">
-                    <div class="rule-item">
-                        <i class="fa-solid fa-microchip"></i>
-                        <span><strong>Dual Track System:</strong> Participants will have access to two tracks. The <strong>Trial Track</strong> is designated for robot tuning and sensor calibration. The <strong>Championship Circuit</strong> is for final racing.</span>
-                    </div>
-                    <div class="rule-item">
-                        <i class="fa-solid fa-microchip"></i>
-                        <span><strong>Calibration Phase:</strong> You must tune your robots on the trial track before the official race begins to ensure hardware stability.</span>
-                    </div>
-                    <div class="rule-item">
-                        <i class="fa-solid fa-microchip"></i>
-                        <span><strong>Autonomous Control:</strong> Robots must operate 100% autonomously. Any external manual intervention will result in immediate disqualification.</span>
-                    </div>
-                    <div class="rule-item">
-                        <i class="fa-solid fa-microchip"></i>
-                        <span><strong>Technical Specs:</strong> Bots must adhere to the 20cm x 20cm dimension limits and must not damage the arena surface.</span>
-                    </div>
-                </div>
-
-                <!-- Featured Workshop -->
-                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="workshop-badge">INCLUDED</span>
-                        <i class="fa-solid fa-graduation-cap text-white/40"></i>
-                    </div>
-                    <h4 class="font-space font-black text-sm uppercase tracking-wider text-white">Free Robot Building Workshop</h4>
-                    <p class="text-[10px] text-white/50 leading-relaxed mt-2">
-                        Gain deep insights into motor drivers, sensor arrays, and track logic. This session is provided free of charge for all registered participants to level up their competitive edge.
-                    </p>
-                </div>
-
-                <button onclick="openPortal()" class="w-full bg-white text-black font-display btn-black-bold py-5 rounded-full text-[10px] tracking-[4px] hover:scale-[1.02] transition-transform shadow-[0_0_30px_rgba(255,255,255,0.4)] uppercase">
-                    Initialize Registration
+            <div id="proceed-btn-container" class="absolute bottom-24 left-1/2 -translate-x-1/2 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001]">
+                <button onclick="openPortal()" class="bg-white text-black font-display btn-black-bold px-12 py-5 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.5)] uppercase">
+                    Proceed to Registration
                 </button>
             </div>
-
-            <div id="proceed-btn-container" class="absolute bottom-24 left-1/2 -translate-x-1/2 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001]"></div>
         </div>
     </div>
 
@@ -534,12 +452,48 @@
     </div>
 
     <script>
+        /**
+         * ============================================================
+         * SPONSOR MANAGEMENT SYSTEM (GITHUB FOLDER STRUCTURE)
+         * ============================================================
+         * To add/edit sponsors:
+         * logoScale: 1.0 is default. 1.5 is 50% larger, 2.0 is double size.
+         * boxGradient: Set any CSS color or gradient for the background box.
+         */
         const sponsorConfig = {
             "TITLE SPONSOR": [  
-                { name: "ATHARVA SOLAR TECHNOLOGY", logo: "sponsor/title/AST.png", desc: "Renewable Energy Support", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" }
+                { 
+                    name: "ATHARVA SOLAR TECHNOLOGY", 
+                    logo: "sponsor/title/AST.png", 
+                    desc: "Renewable Energy Support",
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
+                }
+               /* { 
+                    name: "PLX SOLAR", 
+                    logo: "sponsor/title/PLX(2).png", 
+                    desc: "Energy & Infrastructure Partner",
+                    logoScale: 1.6, 
+                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))"
+                }*/
+            ],
+            "GOLD PARTNER": [
+               /* { 
+                    name: "GOLD PARTNER 1", 
+                    logo: "sponsor/gold/logo.png", 
+                    desc: "Technical Support",
+                    logoScale: 1.2, 
+                    boxGradient: "rgba(255, 215, 0, 0.05)"
+                }*/
             ],
             "SILVER PARTNER": [
-                { name: "VKO Studio", logo: "sponsor/silver/vko.svg", desc: "Designing Partner", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" }
+                { 
+                    name: "VKO Studio", 
+                    logo: "sponsor/silver/vko.svg", 
+                    desc: "Designing Partner",
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
+                }
             ]
         };
 
@@ -560,6 +514,7 @@
                     
                     motivationTimeline = gsap.timeline({
                         onComplete: () => {
+                            // Automatically hide skip arrow when sequence finishes naturally
                             gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
                                 document.getElementById("skip-cinematic-arrow").style.display = 'none';
                             }});
@@ -571,6 +526,7 @@
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
                     });
                     motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
+                        // Hide skip arrow when preparation button begins to appear
                         gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
                             document.getElementById("skip-cinematic-arrow").style.display = 'none';
                         }});
@@ -585,6 +541,7 @@
                 motivationTimeline.kill(); 
                 gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0, y: -30, display: 'none' });
                 gsap.set("#workshop-cta", { opacity: 1, y: 0, clearProps: "transform" });
+                // Instantly remove skip trigger
                 gsap.set("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', display: 'none' });
             }
         }
@@ -616,20 +573,14 @@
         }
 
         function showProceedButton() {
+            const btn = document.getElementById('proceed-btn-container');
             const skipBtn = document.getElementById('skip-btn-el');
-            const rules = document.getElementById('rules-briefing');
-            const video = document.getElementById('trans-vid-asset');
             
+            // Hide skip button when video finishes
             gsap.to(skipBtn, { opacity: 0, duration: 0.5, onComplete: () => skipBtn.style.display = 'none' });
             
-            // Blur and Dim the background video when rules appear
-            gsap.to(video, { filter: "blur(20px) brightness(0.4)", duration: 1.5 });
-
-            rules.style.display = 'block';
-            gsap.fromTo(rules, 
-                { opacity: 0, y: 50, scale: 0.95 }, 
-                { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power4.out" }
-            );
+            btn.classList.remove('pointer-events-none');
+            gsap.to(btn, { opacity: 1, y: 0, duration: 1 });
         }
 
         function skipVideo() {
@@ -646,12 +597,8 @@
         function openPortal() {
             const transStage = document.getElementById('transition-video-stage');
             const portal = document.getElementById('registration-portal');
-            const rules = document.getElementById('rules-briefing');
-
-            // Fade out rules and stage
-            gsap.to([transStage, rules], { opacity: 0, duration: 1, onComplete: () => {
+            gsap.to(transStage, { opacity: 0, duration: 1, onComplete: () => {
                 transStage.style.display = 'none';
-                rules.style.display = 'none';
                 portal.style.display = 'flex';
                 document.body.style.overflow = 'auto';
                 document.documentElement.style.overflow = 'auto';
@@ -675,7 +622,7 @@
                 return `
                 <div class="flex flex-col items-center gap-3 group">
                     <div class="sponsor-logo-box" style="background: ${bg}; width: ${220 * scale}px; height: ${100 * scale}px;">
-                        <img src="${s.logo}" alt="${s.name}" class="w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" style="height: ${40 * scale}px;" onerror="this.src='https://via.placeholder.com/220x100/000000/FFFFFF?text=${s.name}'">
+                        <img src="${s.logo}" alt="${s.name}" class="w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" style="height: ${40 * scale}px;" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=${s.name}'">
                     </div>
                     <span class="text-[8px] md:text-[10px] font-black uppercase tracking-[3px] opacity-40 group-hover:opacity-100 transition-opacity text-center">${s.name}</span>
                 </div>
