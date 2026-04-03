@@ -192,11 +192,11 @@
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Rule Panel Styles - DARK GLASS SHADE */
+        /* Rule Panel Styles - DARK MIDNIGHT GLASS */
         .rules-glass-panel {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
             width: clamp(300px, 92vw, 650px);
             max-height: 48vh;
@@ -204,13 +204,13 @@
             padding: 30px;
             margin-bottom: 24px;
             color: #fff;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
             scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.1) transparent;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
 
         .rules-glass-panel::-webkit-scrollbar { width: 4px; }
-        .rules-glass-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .rules-glass-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
         .rule-item {
             display: flex;
@@ -403,9 +403,9 @@
 
     <!-- PHASE 3: REGISTRATION -->
     <div id="registration-portal">
-        <!-- pt-20 adjusted to pt-14 for slightly higher logo; mb-16 adjusted to mb-6 for tight gap -->
-        <div class="w-full max-w-2xl mx-auto px-4 flex flex-col items-center pt-14 pb-10">
-            <div class="flex justify-center mb-6">
+        <!-- pt-32 increases gap between fixed header and logo; mb-4 maintains tight gap to card -->
+        <div class="w-full max-w-2xl mx-auto px-4 flex flex-col items-center pt-32 pb-10">
+            <div class="flex justify-center mb-4">
                 <img src="logo.svg" alt="Logo" class="main-logo-top">
             </div>
 
