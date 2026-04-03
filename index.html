@@ -41,7 +41,7 @@
             background-color: var(--race-black);
             color: white;
             font-family: 'Inter', sans-serif;
-            overflow: hidden; /* LOCKED BY DEFAULT */
+            overflow: hidden; 
             min-height: 100vh;
         }
 
@@ -185,11 +185,46 @@
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         .skip-btn {
-            position: absolute; bottom: 40px; right: 40px; z-index: 1000;
+            position: absolute; top: 100px; right: 40px; z-index: 1000;
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-blur: 15px; color: white; padding: 12px 28px; border-radius: 100px;
+            backdrop-filter: blur(15px); color: white; padding: 12px 28px; border-radius: 100px;
             font-size: 10px; letter-spacing: 3px; font-weight: 900; transition: 0.4s;
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Rule Panel Styles - DARK GLASS SHADE REINSTATED */
+        .rules-glass-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            width: clamp(300px, 92vw, 650px);
+            max-height: 48vh;
+            overflow-y: auto;
+            padding: 30px;
+            margin-bottom: 24px;
+            color: #fff;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.1) transparent;
+        }
+
+        .rules-glass-panel::-webkit-scrollbar { width: 4px; }
+        .rules-glass-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .rule-item {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 18px;
+            align-items: flex-start;
+        }
+
+        .rule-dot {
+            width: 8px; height: 2px;
+            background: #fff;
+            margin-top: 10px;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(255,255,255,0.4);
         }
 
         /* Skip Arrow Trigger */
@@ -285,9 +320,9 @@
                 <div class="matte-surface p-10 md:p-14 max-w-xl grain">
                     <div class="flex flex-col items-center gap-2 mb-10">
                         <p class="text-[10px] font-bold tracking-[4px] uppercase text-zinc-500 flicker -mb-2">Preparation Phase</p>
-                        <img src="textlogo.svg" alt="Prep Stage Logo" class="h-28 md:h-44 drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]" onerror="this.src='https://via.placeholder.com/400x150/000000/FFFFFF?text=TEXT+LOGO'">
+                        <img src="textlogo.svg" alt="Prep Stage Logo" class="h-28 md:h-44 drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]" onerror="this.src='https://via.placeholder.com/400x150/000000/FFFFFF?text=TRACK+VERSE'">
                     </div>
-                    <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4">Master robotic optimization before competition begins. Full technical briefing sessions are conducted during the induction phase.</p>
+                    <p class="text-zinc-500 text-xs md:text-sm leading-relaxed font-sans px-4 uppercase tracking-[1px]">Master robotic optimization before competition begins. Full technical briefing sessions are conducted during the induction phase.</p>
                 </div>
                 <button class="bg-white text-black font-display btn-black-bold px-12 py-5 md:px-14 md:py-6 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-105 transition-transform shadow-2xl uppercase" onclick="startTransitionVideo()">Enter Arena</button>
             </div>
@@ -315,7 +350,50 @@
             <video id="trans-vid-asset" class="w-full h-full object-contain" playsinline>
                 <source src="cinematic.webm" type="video/webm">
             </video>
-            <div id="proceed-btn-container" class="absolute bottom-24 left-1/2 -translate-x-1/2 opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001]">
+            
+            <div id="proceed-btn-container" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001] px-4">
+                
+                <!-- DARK MISSION DIRECTIVES PANEL REINSTATED -->
+                <div class="rules-glass-panel grain">
+                    <div class="text-center mb-6">
+                        <h3 class="font-display text-[10px] tracking-[6px] text-white uppercase mb-1">Mission Directives</h3>
+                        <div class="h-[1px] w-12 bg-white/30 mx-auto"></div>
+                    </div>
+                    
+                    <div class="space-y-4 text-left">
+                        <div class="rule-item">
+                            <div class="rule-dot"></div>
+                            <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
+                                <strong class="text-white">Arena Logistics:</strong> Features two dedicated circuits — a <span class="text-white">Tuning & Testing zone</span> and a high-speed <span class="text-white">Main Racing Track</span>.
+                            </p>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-dot"></div>
+                            <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
+                                <strong class="text-white">Prize Pool:</strong> Compete for an elite reward pool exceeding <span class="text-white">₹7,000+</span>.
+                            </p>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-dot"></div>
+                            <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
+                                <strong class="text-white">Dual Certification:</strong> Secure an official <span class="text-white">EESA Workshop Certificate</span> post-training and a separate <span class="text-white">Participation Certificate</span> after the race.
+                            </p>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-dot"></div>
+                            <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
+                                <strong class="text-white">Autonomous Control:</strong> WiFi steering is strictly forbidden. WiFi integration is permitted <span class="text-white">ONLY for telemetry and PID/KP tuning</span>.
+                            </p>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-dot"></div>
+                            <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
+                                <strong class="text-white">Professional Engineering:</strong> No technical limitations on build complexity. Show your mechanical and coding skills to the fullest.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <button onclick="openPortal()" class="bg-white text-black font-display btn-black-bold px-12 py-5 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.5)] uppercase">
                     Proceed to Registration
                 </button>
@@ -452,14 +530,6 @@
     </div>
 
     <script>
-        /**
-         * ============================================================
-         * SPONSOR MANAGEMENT SYSTEM (GITHUB FOLDER STRUCTURE)
-         * ============================================================
-         * To add/edit sponsors:
-         * logoScale: 1.0 is default. 1.5 is 50% larger, 2.0 is double size.
-         * boxGradient: Set any CSS color or gradient for the background box.
-         */
         const sponsorConfig = {
             "TITLE SPONSOR": [  
                 { 
@@ -469,22 +539,6 @@
                     logoScale: 1.4, 
                     boxGradient: "rgba(255, 255, 255, 0.05)"
                 }
-               /* { 
-                    name: "PLX SOLAR", 
-                    logo: "sponsor/title/PLX(2).png", 
-                    desc: "Energy & Infrastructure Partner",
-                    logoScale: 1.6, 
-                    boxGradient: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))"
-                }*/
-            ],
-            "GOLD PARTNER": [
-               /* { 
-                    name: "GOLD PARTNER 1", 
-                    logo: "sponsor/gold/logo.png", 
-                    desc: "Technical Support",
-                    logoScale: 1.2, 
-                    boxGradient: "rgba(255, 215, 0, 0.05)"
-                }*/
             ],
             "SILVER PARTNER": [
                 { 
@@ -514,7 +568,6 @@
                     
                     motivationTimeline = gsap.timeline({
                         onComplete: () => {
-                            // Automatically hide skip arrow when sequence finishes naturally
                             gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
                                 document.getElementById("skip-cinematic-arrow").style.display = 'none';
                             }});
@@ -526,7 +579,6 @@
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
                     });
                     motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
-                        // Hide skip arrow when preparation button begins to appear
                         gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
                             document.getElementById("skip-cinematic-arrow").style.display = 'none';
                         }});
@@ -541,7 +593,6 @@
                 motivationTimeline.kill(); 
                 gsap.set(['#line-1', '#line-2', '#line-3'], { opacity: 0, y: -30, display: 'none' });
                 gsap.set("#workshop-cta", { opacity: 1, y: 0, clearProps: "transform" });
-                // Instantly remove skip trigger
                 gsap.set("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', display: 'none' });
             }
         }
@@ -575,10 +626,7 @@
         function showProceedButton() {
             const btn = document.getElementById('proceed-btn-container');
             const skipBtn = document.getElementById('skip-btn-el');
-            
-            // Hide skip button when video finishes
             gsap.to(skipBtn, { opacity: 0, duration: 0.5, onComplete: () => skipBtn.style.display = 'none' });
-            
             btn.classList.remove('pointer-events-none');
             gsap.to(btn, { opacity: 1, y: 0, duration: 1 });
         }
@@ -587,7 +635,6 @@
             const video = document.getElementById('trans-vid-asset');
             const skipBtn = document.getElementById('skip-btn-el');
             const loader = document.getElementById('cinematic-loader');
-            
             video.pause();
             skipBtn.style.display = 'none';
             loader.style.display = 'none';
@@ -602,7 +649,6 @@
                 portal.style.display = 'flex';
                 document.body.style.overflow = 'auto';
                 document.documentElement.style.overflow = 'auto';
-                
                 gsap.to(portal, { opacity: 1, duration: 1 });
                 initSponsorSystem(); 
                 gsap.from(".form-element", { y: 20, opacity: 0, stagger: 0.1, duration: 0.6 });
