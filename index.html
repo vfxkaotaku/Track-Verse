@@ -192,7 +192,7 @@
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Rule Panel Styles - DARK GLASS SHADE REINSTATED */
+        /* Rule Panel Styles - DARK GLASS SHADE */
         .rules-glass-panel {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
             backdrop-filter: blur(30px);
@@ -353,7 +353,7 @@
             
             <div id="proceed-btn-container" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001] px-4">
                 
-                <!-- DARK MISSION DIRECTIVES PANEL REINSTATED -->
+                <!-- DARK MISSION DIRECTIVES PANEL -->
                 <div class="rules-glass-panel grain">
                     <div class="text-center mb-6">
                         <h3 class="font-display text-[10px] tracking-[6px] text-white uppercase mb-1">Mission Directives</h3>
@@ -403,8 +403,9 @@
 
     <!-- PHASE 3: REGISTRATION -->
     <div id="registration-portal">
-        <div class="w-full max-w-2xl mx-auto px-4 flex flex-col items-center pt-20 pb-10">
-            <div class="flex justify-center mb-16">
+        <!-- pt-20 adjusted to pt-14 for slightly higher logo; mb-16 adjusted to mb-6 for tight gap -->
+        <div class="w-full max-w-2xl mx-auto px-4 flex flex-col items-center pt-14 pb-10">
+            <div class="flex justify-center mb-6">
                 <img src="logo.svg" alt="Logo" class="main-logo-top">
             </div>
 
@@ -699,20 +700,6 @@
                     </div>
                 `;
             }).join('');
-        }
-
-        function openSponsorModal() {
-            const modal = document.getElementById('sponsor-modal');
-            modal.style.display = 'block';
-            gsap.to(modal, { opacity: 1, duration: 0.5 });
-            gsap.fromTo(".sponsor-slide-item", { opacity: 0, x: 100 }, { opacity: 1, x: 0, stagger: 0.2, duration: 0.8, ease: "power3.out" });
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeSponsorModal() {
-            const modal = document.getElementById('sponsor-modal');
-            gsap.to(modal, { opacity: 0, duration: 0.5, onComplete: () => modal.style.display = 'none' });
-            document.body.style.overflow = 'auto';
         }
 
         function copyUPI() {
