@@ -591,6 +591,9 @@
     </div>
 
     <script>
+        // Feature: Audio sound play
+        const arenaSound = new Audio('Welcome to the arena.mp3');
+
         const sponsorConfig = {
             "TITLE SPONSOR": [  
                 { 
@@ -602,7 +605,7 @@
                 }
             ],
             "GOLD PARTNER": [
-               /* {
+                /* {
                     name: "RoboMasters Inc",
                     logo: "sponsor/gold/robo.png",
                     desc: "Technical Hardware Support",
@@ -681,6 +684,9 @@
         }
 
         function startTransitionVideo() {
+            // Play sound immediately on click
+            arenaSound.play().catch(e => console.log("Audio interaction required or file not found.", e));
+
             const motivation = document.getElementById('motivation-stage');
             const transStage = document.getElementById('transition-video-stage');
             const video = document.getElementById('trans-vid-asset');
