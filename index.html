@@ -593,6 +593,19 @@
     <script>
         // Feature: Audio sound play
         const arenaSound = new Audio('Welcome to the arena.mp3');
+        let soundStarted = false;
+
+        // Force play sound on first user interaction (browser requirement)
+        const triggerInitialVoice = () => {
+            if (!soundStarted) {
+                arenaSound.play().then(() => {
+                    soundStarted = true;
+                }).catch(e => console.log("Waiting for user interaction..."));
+            }
+        };
+
+        document.addEventListener('click', triggerInitialVoice, { once: true });
+        document.addEventListener('touchstart', triggerInitialVoice, { once: true });
 
         const sponsorConfig = {
             "TITLE SPONSOR": [  
@@ -640,6 +653,9 @@
         let motivationTimeline;
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Attempt to play immediately (might be blocked by browser)
+            triggerInitialVoice();
+
             const alphaVideo = document.getElementById('alpha-video');
             const introTimer = setTimeout(proceedToMotivation, 4500);
             alphaVideo.onended = () => { clearTimeout(introTimer); proceedToMotivation(); };
@@ -684,9 +700,6 @@
         }
 
         function startTransitionVideo() {
-            // Play sound immediately on click
-            arenaSound.play().catch(e => console.log("Audio interaction required or file not found.", e));
-
             const motivation = document.getElementById('motivation-stage');
             const transStage = document.getElementById('transition-video-stage');
             const video = document.getElementById('trans-vid-asset');
