@@ -93,7 +93,7 @@
         }
 
         /* --- Content Sections --- */
-        #intro-alpha, #motivation-stage, #transition-video-stage, #registration-portal, #voice-loading-stage {
+        #intro-alpha, #motivation-stage, #transition-video-stage, #registration-portal {
             position: fixed; inset: 0; display: none; opacity: 0;
             z-index: 10;
         }
@@ -190,50 +190,7 @@
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Circular Visualizer Styles */
-        #visualizer-ring {
-            position: relative;
-            width: clamp(200px, 70vw, 300px);
-            height: clamp(200px, 70vw, 300px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ring-bar {
-            position: absolute;
-            bottom: 50%;
-            width: clamp(2px, 0.8vw, 4px);
-            height: 12px; 
-            background: #fff;
-            transform-origin: center bottom;
-            border-radius: 100px;
-            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
-            transition: height 0.04s ease-out, transform 0.04s ease-out;
-        }
-
-        .ring-center {
-            position: absolute;
-            width: clamp(60px, 20vw, 85px);
-            height: clamp(60px, 20vw, 85px);
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 75%);
-            z-index: 5;
-            transition: transform 0.05s ease-out;
-        }
-
-        .ring-center img {
-            width: 50%;
-            height: 50%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-        }
-
-        /* Rule Panel Styles */
+        /* Rule Panel Styles - DARK MIDNIGHT GLASS */
         .rules-glass-panel {
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(25px);
@@ -290,6 +247,7 @@
         }
         .sponsor-slide-item { opacity: 0; transform: translateX(80px); }
 
+        /* --- Tier Badges --- */
         .tier-tag {
             font-family: 'Syncopate', sans-serif; font-size: 10px; padding: 6px 20px;
             border-radius: 100px; letter-spacing: 3px; font-weight: 900;
@@ -299,6 +257,7 @@
             overflow: hidden;
         }
 
+        /* --- NEW: Platinum/Cyber Blue Title Sponsor (Distinct from Gold) --- */
         .tier-title {
             background: linear-gradient(90deg, #E5E4E2 0%, #FFFFFF 25%, #B4C6D8 50%, #FFFFFF 75%, #E5E4E2 100%);
             background-size: 200% 100%;
@@ -313,19 +272,47 @@
             100% { background-position: -200% 0; }
         }
 
+        /* Faster, more intense shining streak overlay */
+        .tier-title::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: skewX(-30deg);
+            animation: intense-streak 3.5s infinite ease-in-out;
+        }
+
+        @keyframes intense-streak {
+            0% { left: -120%; }
+            15% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        /* Gold Gradient: Vivid Yellow-Gold (Remains distinct) */
         .tier-gold {
             background: linear-gradient(90deg, #FDB931 0%, #9E700B 100%);
             box-shadow: 0 0 20px rgba(253, 185, 49, 0.3);
             border: 1px solid rgba(253, 185, 49, 0.5);
             color: #000;
         }
+        /* Silver Gradient: Metallic Gray-White */
         .tier-silver {
             background: linear-gradient(90deg, #E0E0E0 0%, #757575 100%);
             box-shadow: 0 0 20px rgba(224, 224, 224, 0.2);
             border: 1px solid rgba(224, 224, 224, 0.5);
             color: #000;
         }
-        .tier-default { background: rgba(255,255,255,0.05); color: white; }
+        /* Default Gradient */
+        .tier-default {
+            background: rgba(255,255,255,0.05); color: white;
+        }
 
         .close-badge-highlight {
             background: white; color: black; font-size: 8px; font-weight: 900;
@@ -350,42 +337,14 @@
         
         .hardware-grid label { cursor: pointer; }
         .hardware-grid input:checked + .hardware-box { border-color: white; background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
-
-        /* BGM Auto-Play Interaction Overlay */
-        #bgm-trigger {
-            position: fixed; inset: 0; z-index: 5000;
-            background: #000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; gap: 20px;
-        }
-        .pulse-button {
-            background: #fff; color: #000; font-family: 'Syncopate', sans-serif;
-            font-size: 10px; font-weight: 900; padding: 20px 40px;
-            border-radius: 100px; letter-spacing: 5px; text-transform: uppercase;
-            box-shadow: 0 0 30px rgba(255,255,255,0.3);
-            transition: 0.4s; cursor: pointer;
-        }
-        .pulse-button:hover { scale: 1.1; box-shadow: 0 0 50px rgba(255,255,255,0.6); }
-
     </style>
 </head>
 <body class="grain">
 
-    <!-- AUDIO ELEMENTS -->
-    <audio id="main-bgm" src="bgm.mp3" loop></audio>
-
-    <!-- INITIAL INTERACTION TRIGGER (Required for BGM AutoPlay) -->
-    <div id="bgm-trigger">
-        <div class="flex flex-col items-center gap-4 text-center px-6">
-            <p class="text-[8px] font-display tracking-[6px] opacity-40 uppercase mb-4">Remote Link Detected</p>
-            <h2 class="font-space text-2xl font-black italic tracking-widest text-white mb-2 uppercase">TRACK VERSE SYSTEM</h2>
-            <button onclick="initializeSystem()" class="pulse-button mt-4">Initialize Link</button>
-        </div>
-    </div>
-
     <svg style="display:none;">
         <filter id="noiseFilter">
             <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0" />
         </filter>
     </svg>
 
@@ -404,7 +363,7 @@
     <!-- PHASE 1: LOADING CLIP -->
     <div id="intro-alpha">
         <div class="central-clip-container mb-8">
-            <video id="alpha-video" class="w-full h-full object-cover" muted playsinline>
+            <video id="alpha-video" class="w-full h-full object-cover" autoplay muted playsinline>
                 <source src="loadingclip.webm" type="video/webm">
             </video>
         </div>
@@ -441,16 +400,6 @@
         </div>
     </div>
 
-    <!-- PHASE 2.2: VOICE SENSITIVE LOADING (CIRCULAR) -->
-    <div id="voice-loading-stage" class="bg-black z-[1500] flex flex-col items-center justify-center">
-        <div id="visualizer-ring">
-            <div class="ring-center" id="center-logo-box">
-                <img src="white logo.png" alt="Logo" id="vocal-logo" onerror="this.src='https://via.placeholder.com/100?text=TV'">
-            </div>
-            <!-- Bars generated via JS -->
-        </div>
-    </div>
-
     <!-- PHASE 2.5: CINEMATIC CLIP -->
     <div id="transition-video-stage">
         <div class="relative w-full h-full flex flex-col items-center justify-center">
@@ -464,38 +413,48 @@
             </video>
             
             <div id="proceed-btn-container" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001] px-4">
+                
+                <!-- DARK MISSION DIRECTIVES PANEL -->
                 <div class="rules-glass-panel grain">
                     <div class="text-center mb-6">
                         <h3 class="font-display text-[10px] tracking-[6px] text-white uppercase mb-1">Mission Directives</h3>
                         <div class="h-[1px] w-12 bg-white/30 mx-auto"></div>
                     </div>
+                    
                     <div class="space-y-4 text-left">
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Arena Logistics:</strong> Features two dedicated circuits — Tuning/Testing zone and the Main Track.
+                                <strong class="text-white">Arena Logistics:</strong> Features two dedicated circuits — a <span class="text-white">Tuning & Testing zone</span> and a high-speed <span class="text-white">Main Racing Track</span>.
                             </p>
                         </div>
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Prize Pool:</strong> Elite reward pool exceeding <span class="text-white">₹7,000+</span>.
+                                <strong class="text-white">Prize Pool:</strong> Compete for an elite reward pool exceeding <span class="text-white">₹7,000+</span>.
                             </p>
                         </div>
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Certificates:</strong> Dual Workshop & Participation credentials provided.
+                                <strong class="text-white">Dual Certification:</strong> Secure an official <span class="text-white">EESA Workshop Certificate</span> post-training and a separate <span class="text-white">Participation Certificate</span> after the race.
                             </p>
                         </div>
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Tech Standard:</strong> WiFi strictly for telemetry and PID/KP tuning only.
+                                <strong class="text-white">Autonomous Control:</strong> WiFi steering is strictly forbidden. WiFi integration is permitted <span class="text-white">ONLY for telemetry and PID/KP tuning</span>.
+                            </p>
+                        </div>
+                        <div class="rule-item">
+                            <div class="rule-dot"></div>
+                            <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
+                                <strong class="text-white">Professional Engineering:</strong> No technical limitations on build complexity. Show your mechanical and coding skills to the fullest.
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <button onclick="openPortal()" class="bg-white text-black font-display btn-black-bold px-12 py-5 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.5)] uppercase">
                     Proceed to Registration
                 </button>
@@ -581,7 +540,7 @@
                                         <input type="text" id="transactionId" name="transactionId" required class="w-full input-3d rounded-xl py-3 px-4 text-white text-xs font-mono uppercase" placeholder="Transaction ID / UTR">
                                         <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
                                             <p class="text-[10px] text-white font-black uppercase mb-1">Workshop Entry</p>
-                                            <p class="text-[9px] text-white/40">Admission + Briefing.</p>
+                                            <p class="text-[9px] text-white/40">Includes Admission + Technical Training.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -632,128 +591,87 @@
     </div>
 
     <script>
-        // Audio & Circular Visualizer Logic
+        // Feature: Audio sound play
         const arenaSound = new Audio('Welcome to the arena.mp3');
-        const bgm = document.getElementById('main-bgm');
-
-        let audioCtx, analyser, dataArray, animationId;
-        const BAR_COUNT = 64; 
-
-        // Dynamic Radius based on screen size
-        function getRadius() {
-            return Math.min(window.innerWidth * 0.28, 120);
-        }
-
-        // BGM Playback Helper (Triggered by user click)
-        function initializeSystem() {
-            // Play background music
-            bgm.play().catch(e => console.log("BGM Error:", e));
-            bgm.volume = 0.4;
-
-            // Fade out trigger overlay
-            gsap.to("#bgm-trigger", { opacity: 0, duration: 1, onComplete: () => {
-                document.getElementById('bgm-trigger').style.display = 'none';
-                
-                // Start the actual intro video
-                const alphaVideo = document.getElementById('alpha-video');
-                alphaVideo.play();
-
-                // Proceed to motivation timer
-                const introTimer = setTimeout(proceedToMotivation, 4500);
-                alphaVideo.onended = () => { clearTimeout(introTimer); proceedToMotivation(); };
-            }});
-        }
-
-        function createCircularVisualizer() {
-            const ring = document.getElementById('visualizer-ring');
-            const radius = getRadius();
-            for (let i = 0; i < BAR_COUNT; i++) {
-                const bar = document.createElement('div');
-                bar.className = 'ring-bar';
-                const rotation = (i / BAR_COUNT) * 360;
-                bar.style.transform = `rotate(${rotation}deg) translateY(-${radius}px)`;
-                ring.appendChild(bar);
-            }
-        }
-
-        function initVoiceVisualizer() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioCtx.createAnalyser();
-                const source = audioCtx.createMediaElementSource(arenaSound);
-                source.connect(analyser);
-                analyser.connect(audioCtx.destination);
-                analyser.fftSize = 256; 
-                dataArray = new Uint8Array(analyser.frequencyBinCount);
-            }
-        }
-
-        function runVisualizer() {
-            analyser.getByteFrequencyData(dataArray);
-            const bars = document.querySelectorAll('.ring-bar');
-            const logo = document.getElementById('center-logo-box');
-            const radius = getRadius();
-            
-            let sum = 0;
-            bars.forEach((bar, index) => {
-                const dataIdx = Math.floor((index / BAR_COUNT) * dataArray.length * 0.4);
-                const val = dataArray[dataIdx] || 0;
-                sum += val;
-                const baseScale = (val / 255) * (radius * 0.5);
-                const height = (radius * 0.1) + baseScale;
-                
-                const rotation = (index / BAR_COUNT) * 360;
-                bar.style.height = `${height}px`;
-                bar.style.backgroundColor = `rgba(255, 255, 255, ${0.4 + (val / 255)})`;
-                bar.style.boxShadow = `0 0 ${val/12}px rgba(255,255,255,0.7)`;
-                bar.style.transform = `rotate(${rotation}deg) translateY(-${radius}px)`;
-            });
-
-            const avg = sum / BAR_COUNT;
-            const logoScale = 1 + (avg / 255) * 0.35;
-            logo.style.transform = `scale(${logoScale})`;
-
-            animationId = requestAnimationFrame(runVisualizer);
-        }
 
         const sponsorConfig = {
             "TITLE SPONSOR": [  
-                { name: "ATHARVA SOLAR TECHNOLOGY", logo: "sponsor/title/AST.png", desc: "Renewable Energy Support", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" }
+                { 
+                    name: "ATHARVA SOLAR TECHNOLOGY", 
+                    logo: "sponsor/title/AST.png", 
+                    desc: "Renewable Energy Support",
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
+                }
+            ],
+            "GOLD PARTNER": [
+                /* {
+                    name: "RoboMasters Inc",
+                    logo: "sponsor/gold/robo.png",
+                    desc: "Technical Hardware Support",
+                    logoScale: 1.2
+                }*/
             ],
             "SILVER PARTNER": [
-                { name: "VKO Studio", logo: "sponsor/silver/vkostudio.svg", desc: "Designing Partner", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" },
-                { name: "Techredy IT Solution", logo: "sponsor/silver/Techredy It Solution.png.png", desc: "  ", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" },
-                { name: "Salunke Automation Pvt.Ltd.", logo: "sponsor/silver/FINAL SALUNKE LOGO.png", desc: "  ", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" }
+                { 
+                    name: "VKO Studio", 
+                    logo: "sponsor/silver/vkostudio.svg", 
+                    desc: "Designing Partner",
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
+                },
+                { 
+                    name: "Techredy IT Solution", 
+                    logo: "sponsor/silver/Techredy It Solution.png.png", 
+                    desc: "  ",
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
+                },
+                { 
+                    name: "Salunke Automation Pvt.Ltd.", 
+                    logo: "sponsor/silver/FINAL SALUNKE LOGO.png", 
+                    desc: "  ",
+                    logoScale: 1.4, 
+                    boxGradient: "rgba(255, 255, 255, 0.05)"
+                }
             ]
         };
 
         let motivationTimeline;
 
-        // Modified proceedToMotivation (made global so initializeSystem can see it)
-        function proceedToMotivation() {
-            const intro = document.getElementById('intro-alpha');
-            gsap.to(intro, { opacity: 0, duration: 1.2, onComplete: () => {
-                intro.style.display = 'none';
-                const stage = document.getElementById('motivation-stage');
-                stage.style.display = 'block';
-                gsap.to(stage, { opacity: 1, duration: 1.5 });
-                
-                motivationTimeline = gsap.timeline();
-                ['#line-1', '#line-2', '#line-3'].forEach((id) => {
-                    motivationTimeline.to(id, { opacity: 1, y: -10, duration: 0.8 })
-                                      .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
-                });
-                motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
-                    gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
-                        document.getElementById("skip-cinematic-arrow").style.display = 'none';
-                    }});
-                }});
-                motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
-            }});
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            createCircularVisualizer();
+            const alphaVideo = document.getElementById('alpha-video');
+            const introTimer = setTimeout(proceedToMotivation, 4500);
+            alphaVideo.onended = () => { clearTimeout(introTimer); proceedToMotivation(); };
+
+            function proceedToMotivation() {
+                const intro = document.getElementById('intro-alpha');
+                gsap.to(intro, { opacity: 0, duration: 1.2, onComplete: () => {
+                    intro.style.display = 'none';
+                    const stage = document.getElementById('motivation-stage');
+                    stage.style.display = 'block';
+                    gsap.to(stage, { opacity: 1, duration: 1.5 });
+                    
+                    motivationTimeline = gsap.timeline({
+                        onComplete: () => {
+                            gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
+                                document.getElementById("skip-cinematic-arrow").style.display = 'none';
+                            }});
+                        }
+                    });
+
+                    ['#line-1', '#line-2', '#line-3'].forEach((id) => {
+                        motivationTimeline.to(id, { opacity: 1, y: -10, duration: 0.8 })
+                                          .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
+                    });
+                    motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
+                        gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
+                            document.getElementById("skip-cinematic-arrow").style.display = 'none';
+                        }});
+                    }});
+                    motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
+                }});
+            }
         });
 
         function skipMotivationSequence() {
@@ -766,62 +684,32 @@
         }
 
         function startTransitionVideo() {
+            // Play sound immediately on click
+            arenaSound.play().catch(e => console.log("Audio interaction required or file not found.", e));
+
             const motivation = document.getElementById('motivation-stage');
-            const voiceStage = document.getElementById('voice-loading-stage');
-
-            gsap.to(motivation, { opacity: 0, duration: 0.8, onComplete: () => {
-                motivation.style.display = 'none';
-                voiceStage.style.display = 'flex';
-                gsap.to(voiceStage, { opacity: 1, duration: 0.8 });
-
-                initVoiceVisualizer();
-                
-                // Dim BGM slightly while "Welcome to arena" plays
-                gsap.to(bgm, { volume: 0.1, duration: 0.5 });
-                arenaSound.play().catch(e => console.log("Arena audio error."));
-                runVisualizer();
-
-                arenaSound.onended = () => {
-                    // Bring BGM back up
-                    gsap.to(bgm, { volume: 0.4, duration: 1 });
-                    
-                    cancelAnimationFrame(animationId);
-                    const bars = document.querySelectorAll('.ring-bar');
-                    gsap.to(bars, { 
-                        y: 0, 
-                        scale: 0,
-                        opacity: 0, 
-                        duration: 0.7, 
-                        stagger: { each: 0.005, from: "center" },
-                        ease: "back.in(1.7)" 
-                    });
-                    gsap.to("#center-logo-box", { scale: 0, opacity: 0, duration: 0.6, delay: 0.4 });
-                    gsap.to(voiceStage, { opacity: 0, duration: 0.8, delay: 0.8, onComplete: () => {
-                        voiceStage.style.display = 'none';
-                        proceedToCinematic();
-                    }});
-                };
-            }});
-        }
-
-        function proceedToCinematic() {
             const transStage = document.getElementById('transition-video-stage');
             const video = document.getElementById('trans-vid-asset');
             const loader = document.getElementById('cinematic-loader');
-            transStage.style.display = 'block';
-            gsap.to(transStage, { opacity: 1, duration: 1 });
-            if(video.readyState >= 3) {
-                loader.style.display = 'none';
-                video.muted = false;
-                video.play();
-            } else {
-                video.addEventListener('canplaythrough', () => {
+
+            gsap.to(motivation, { opacity: 0, duration: 1, onComplete: () => {
+                motivation.style.display = 'none';
+                transStage.style.display = 'block';
+                gsap.to(transStage, { opacity: 1, duration: 1 });
+
+                if(video.readyState >= 3) {
                     loader.style.display = 'none';
                     video.muted = false;
                     video.play();
-                }, { once: true });
-            }
-            video.onended = showProceedButton;
+                } else {
+                    video.addEventListener('canplaythrough', () => {
+                        loader.style.display = 'none';
+                        video.muted = false;
+                        video.play();
+                    }, { once: true });
+                }
+                video.onended = showProceedButton;
+            }});
         }
 
         function showProceedButton() {
@@ -860,18 +748,33 @@
             const modal = document.getElementById('sponsor-modal');
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden'; 
-            gsap.to(modal, { opacity: 1, duration: 0.5, onComplete: () => {
-                gsap.to(".sponsor-slide-item", { opacity: 1, x: 0, stagger: 0.1, duration: 0.6, ease: "power2.out" });
-            }});
+            
+            gsap.to(modal, { 
+                opacity: 1, 
+                duration: 0.5, 
+                onComplete: () => {
+                    gsap.to(".sponsor-slide-item", {
+                        opacity: 1,
+                        x: 0,
+                        stagger: 0.1,
+                        duration: 0.6,
+                        ease: "power2.out"
+                    });
+                }
+            });
         }
 
         function closeSponsorModal() {
             const modal = document.getElementById('sponsor-modal');
-            gsap.to(modal, { opacity: 0, duration: 0.4, onComplete: () => {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto'; 
-                gsap.set(".sponsor-slide-item", { opacity: 0, x: 80 }); 
-            }});
+            gsap.to(modal, { 
+                opacity: 0, 
+                duration: 0.4, 
+                onComplete: () => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; 
+                    gsap.set(".sponsor-slide-item", { opacity: 0, x: 80 }); 
+                } 
+            });
         }
 
         function initSponsorSystem() {
@@ -879,19 +782,29 @@
             const dashboardContent = document.getElementById('sponsor-dashboard-content');
             const allSponsors = Object.values(sponsorConfig).flat();
             if (allSponsors.length === 0) return;
+
             const marqueeItems = [...allSponsors, ...allSponsors, ...allSponsors, ...allSponsors]; 
-            marqueeInner.innerHTML = marqueeItems.map(s => `
+            marqueeInner.innerHTML = marqueeItems.map(s => {
+                const scale = s.logoScale || 1.0;
+                const bg = s.boxGradient || 'rgba(255,255,255,0.02)';
+                return `
                 <div class="flex flex-col items-center gap-3 group">
-                    <div class="sponsor-logo-box" style="width: 220px; height: 100px;">
-                        <img src="${s.logo}" alt="${s.name}" class="w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" style="height: 40px;" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=${s.name}'">
+                    <div class="sponsor-logo-box" style="background: ${bg}; width: ${220 * scale}px; height: ${100 * scale}px;">
+                        <img src="${s.logo}" alt="${s.name}" class="w-auto brightness-200 grayscale group-hover:grayscale-0 transition-all duration-500" style="height: ${40 * scale}px;" onerror="this.src='https://via.placeholder.com/200x100/000000/FFFFFF?text=${s.name}'">
                     </div>
                     <span class="text-[8px] md:text-[10px] font-black uppercase tracking-[3px] opacity-40 group-hover:opacity-100 transition-opacity text-center">${s.name}</span>
                 </div>
-            `).join('');
+            `}).join('');
 
             dashboardContent.innerHTML = Object.entries(sponsorConfig).map(([tier, list]) => {
                 if (list.length === 0) return '';
-                let tierClass = tier.toUpperCase().includes("TITLE") ? "tier-title" : "tier-default";
+                
+                let tierClass = "tier-default";
+                const upperTier = tier.toUpperCase();
+                if (upperTier.includes("TITLE")) tierClass = "tier-title";
+                else if (upperTier.includes("GOLD")) tierClass = "tier-gold";
+                else if (upperTier.includes("SILVER")) tierClass = "tier-silver";
+
                 return `
                     <div class="space-y-8 sponsor-slide-item">
                         <div class="flex items-center gap-6">
@@ -899,15 +812,18 @@
                             <div class="h-[1px] flex-grow bg-white/10"></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            ${list.map(s => `
-                                <div class="matte-surface p-10 md:p-12 flex flex-col items-center gap-4 group hover:border-white/30 transition-all duration-500 cursor-default">
-                                    <img src="${s.logo}" class="object-contain brightness-200 group-hover:scale-110 transition-transform duration-500" style="height: 80px;" onerror="this.src='https://via.placeholder.com/250x120/000000/FFFFFF?text=${s.name}'">
+                            ${list.map(s => {
+                                const scale = s.logoScale || 1.0;
+                                const bg = s.boxGradient || 'linear-gradient(145deg, rgba(18,18,18,0.9), rgba(8,8,8,0.95))';
+                                return `
+                                <div class="matte-surface p-10 md:p-12 flex flex-col items-center gap-4 group hover:border-white/30 transition-all duration-500 cursor-default" style="background: ${bg};">
+                                    <img src="${s.logo}" class="object-contain brightness-200 group-hover:scale-110 transition-transform duration-500" style="height: ${80 * scale}px;" onerror="this.src='https://via.placeholder.com/250x120/000000/FFFFFF?text=${s.name}'">
                                     <div class="text-center">
                                         <p class="font-space font-black text-sm tracking-[4px] group-hover:text-white transition-colors uppercase">${s.name}</p>
                                         <p class="text-[9px] text-white/30 mt-2 leading-relaxed">${s.desc || ''}</p>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
                 `;
@@ -922,6 +838,7 @@
             dummy.select();
             document.execCommand("copy");
             document.body.removeChild(dummy);
+            
             const btn = document.querySelector('button[onclick="copyUPI()"]');
             btn.innerHTML = '<i class="fa-solid fa-check text-white"></i>';
             setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i>', 2000);
@@ -966,6 +883,7 @@
             const btn = document.getElementById('submit-btn');
             btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> TRANSMITTING...`;
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwoocXDvRhL5ItOydrLFTTOuu9utbbJ3d03cGhGpm6odYd4__LVWuk7N4GYDkYjPj3JsA/exec';
+            
             fetch(scriptURL, { method: 'POST', body: new FormData(this) })
                 .then(() => {
                     document.getElementById('success-team-name').innerText = document.getElementById('teamName').value;
@@ -978,18 +896,9 @@
                     const modal = document.getElementById('success-modal');
                     modal.classList.remove('pointer-events-none'); modal.style.opacity = '1';
                     document.getElementById('success-card').classList.replace('scale-95', 'scale-100');
-                    btn.disabled = false; btn.innerHTML = "Secure My Spot"; 
+                    btn.disabled = false; 
+                    btn.innerHTML = "Secure My Spot"; 
                 });
-        });
-
-        // Recalculate layout on resize
-        window.addEventListener('resize', () => {
-            const bars = document.querySelectorAll('.ring-bar');
-            const radius = getRadius();
-            bars.forEach((bar, index) => {
-                const rotation = (index / BAR_COUNT) * 360;
-                bar.style.transform = `rotate(${rotation}deg) translateY(-${radius}px)`;
-            });
         });
     </script>
 </body>
