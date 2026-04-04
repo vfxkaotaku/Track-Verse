@@ -190,16 +190,50 @@
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Voice loading visualizer bars */
-        .visualizer-bar {
-            width: 6px;
-            background: #fff;
-            border-radius: 10px;
-            transition: height 0.05s ease;
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        /* Circular Visualizer Styles */
+        #visualizer-ring {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Rule Panel Styles - DARK MIDNIGHT GLASS */
+        .ring-bar {
+            position: absolute;
+            bottom: 50%;
+            width: 4px;
+            height: 12px; 
+            background: #fff;
+            transform-origin: center bottom;
+            border-radius: 100px;
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+            transition: height 0.04s ease-out, transform 0.04s ease-out;
+        }
+
+        .ring-center {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 75%);
+            z-index: 5;
+            transition: transform 0.05s ease-out;
+        }
+
+        .ring-center img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+        }
+
+        /* Rule Panel Styles */
         .rules-glass-panel {
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(25px);
@@ -256,7 +290,6 @@
         }
         .sponsor-slide-item { opacity: 0; transform: translateX(80px); }
 
-        /* --- Tier Badges --- */
         .tier-tag {
             font-family: 'Syncopate', sans-serif; font-size: 10px; padding: 6px 20px;
             border-radius: 100px; letter-spacing: 3px; font-weight: 900;
@@ -266,7 +299,6 @@
             overflow: hidden;
         }
 
-        /* --- NEW: Platinum/Cyber Blue Title Sponsor (Distinct from Gold) --- */
         .tier-title {
             background: linear-gradient(90deg, #E5E4E2 0%, #FFFFFF 25%, #B4C6D8 50%, #FFFFFF 75%, #E5E4E2 100%);
             background-size: 200% 100%;
@@ -281,7 +313,6 @@
             100% { background-position: -200% 0; }
         }
 
-        /* Faster, more intense shining streak overlay */
         .tier-title::after {
             content: "";
             position: absolute;
@@ -304,24 +335,19 @@
             100% { left: 150%; }
         }
 
-        /* Gold Gradient: Vivid Yellow-Gold (Remains distinct) */
         .tier-gold {
             background: linear-gradient(90deg, #FDB931 0%, #9E700B 100%);
             box-shadow: 0 0 20px rgba(253, 185, 49, 0.3);
             border: 1px solid rgba(253, 185, 49, 0.5);
             color: #000;
         }
-        /* Silver Gradient: Metallic Gray-White */
         .tier-silver {
             background: linear-gradient(90deg, #E0E0E0 0%, #757575 100%);
             box-shadow: 0 0 20px rgba(224, 224, 224, 0.2);
             border: 1px solid rgba(224, 224, 224, 0.5);
             color: #000;
         }
-        /* Default Gradient */
-        .tier-default {
-            background: rgba(255,255,255,0.05); color: white;
-        }
+        .tier-default { background: rgba(255,255,255,0.05); color: white; }
 
         .close-badge-highlight {
             background: white; color: black; font-size: 8px; font-weight: 900;
@@ -409,20 +435,24 @@
         </div>
     </div>
 
-    <!-- PHASE 2.2: VOICE SENSITIVE LOADING -->
-    <div id="voice-loading-stage" class="bg-black/95 backdrop-blur-3xl z-[1500] flex flex-col items-center justify-center">
-        <div id="visualizer-container" class="flex items-center gap-1 h-24 mb-10">
-            <!-- 20 bars for the frequency visualizer -->
-            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
-            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
-            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
-            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
-        </div>
-        <div class="flex flex-col items-center gap-3">
-            <span class="text-[9px] font-display font-black tracking-[6px] text-white uppercase flicker">Analyzing Vocal Auth</span>
-            <div class="w-32 h-[1px] bg-white/20 relative overflow-hidden">
-                <div id="voice-progress" class="absolute inset-y-0 left-0 bg-white w-0 transition-all duration-300"></div>
+    <!-- PHASE 2.2: VOICE SENSITIVE LOADING (CIRCULAR) -->
+    <div id="voice-loading-stage" class="bg-black/98 backdrop-blur-3xl z-[1500] flex flex-col items-center justify-center">
+        <div id="visualizer-ring" class="mb-12">
+            <div class="ring-center" id="center-logo-box">
+                <img src="white logo.png" alt="Logo" id="vocal-logo" onerror="this.src='https://via.placeholder.com/100?text=TV'">
             </div>
+            <!-- Bars generated via JS -->
+        </div>
+        <div class="flex flex-col items-center gap-5">
+            <div class="flex items-center gap-4">
+                <div class="h-[1px] w-12 bg-white/10"></div>
+                <span class="text-[11px] font-display font-black tracking-[10px] text-white uppercase flicker">Welcome to the Arena.</span>
+                <div class="h-[1px] w-12 bg-white/10"></div>
+            </div>
+            <div class="w-56 h-[1px] bg-white/5 relative overflow-hidden">
+                <div id="voice-progress" class="absolute inset-y-0 left-0 bg-white w-0 transition-all duration-300 shadow-[0_0_15px_#fff]"></div>
+            </div>
+            <span class="text-[7px] text-white/20 uppercase tracking-[6px] font-black">Syncing Neural Frequency...</span>
         </div>
     </div>
 
@@ -439,48 +469,38 @@
             </video>
             
             <div id="proceed-btn-container" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 translate-y-10 transition-all duration-700 pointer-events-none z-[1001] px-4">
-                
-                <!-- DARK MISSION DIRECTIVES PANEL -->
                 <div class="rules-glass-panel grain">
                     <div class="text-center mb-6">
                         <h3 class="font-display text-[10px] tracking-[6px] text-white uppercase mb-1">Mission Directives</h3>
                         <div class="h-[1px] w-12 bg-white/30 mx-auto"></div>
                     </div>
-                    
                     <div class="space-y-4 text-left">
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Arena Logistics:</strong> Features two dedicated circuits — a <span class="text-white">Tuning & Testing zone</span> and a high-speed <span class="text-white">Main Racing Track</span>.
+                                <strong class="text-white">Arena Logistics:</strong> Features two dedicated circuits — Tuning/Testing zone and the Main Track.
                             </p>
                         </div>
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Prize Pool:</strong> Compete for an elite reward pool exceeding <span class="text-white">₹7,000+</span>.
+                                <strong class="text-white">Prize Pool:</strong> Elite reward pool exceeding <span class="text-white">₹7,000+</span>.
                             </p>
                         </div>
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Dual Certification:</strong> Secure an official <span class="text-white">EESA Workshop Certificate</span> post-training and a separate <span class="text-white">Participation Certificate</span> after the race.
+                                <strong class="text-white">Certificates:</strong> Dual Workshop & Participation credentials provided.
                             </p>
                         </div>
                         <div class="rule-item">
                             <div class="rule-dot"></div>
                             <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Autonomous Control:</strong> WiFi steering is strictly forbidden. WiFi integration is permitted <span class="text-white">ONLY for telemetry and PID/KP tuning</span>.
-                            </p>
-                        </div>
-                        <div class="rule-item">
-                            <div class="rule-dot"></div>
-                            <p class="text-[11px] text-white/80 leading-relaxed font-sans uppercase tracking-wider">
-                                <strong class="text-white">Professional Engineering:</strong> No technical limitations on build complexity. Show your mechanical and coding skills to the fullest.
+                                <strong class="text-white">Tech Standard:</strong> WiFi strictly for telemetry and PID/KP tuning only.
                             </p>
                         </div>
                     </div>
                 </div>
-
                 <button onclick="openPortal()" class="bg-white text-black font-display btn-black-bold px-12 py-5 rounded-full text-[10px] md:text-[11px] tracking-[5px] hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.5)] uppercase">
                     Proceed to Registration
                 </button>
@@ -566,7 +586,7 @@
                                         <input type="text" id="transactionId" name="transactionId" required class="w-full input-3d rounded-xl py-3 px-4 text-white text-xs font-mono uppercase" placeholder="Transaction ID / UTR">
                                         <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
                                             <p class="text-[10px] text-white font-black uppercase mb-1">Workshop Entry</p>
-                                            <p class="text-[9px] text-white/40">Includes Admission + Technical Training.</p>
+                                            <p class="text-[9px] text-white/40">Admission + Briefing.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -617,10 +637,22 @@
     </div>
 
     <script>
-        // Audio & Voice Processing Logic
+        // Audio & Circular Visualizer Logic
         const arenaSound = new Audio('Welcome to the arena.mp3');
         let audioCtx, analyser, dataArray, animationId;
-        
+        const BAR_COUNT = 64; 
+
+        function createCircularVisualizer() {
+            const ring = document.getElementById('visualizer-ring');
+            for (let i = 0; i < BAR_COUNT; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'ring-bar';
+                const rotation = (i / BAR_COUNT) * 360;
+                bar.style.transform = `rotate(${rotation}deg) translateY(-110px)`;
+                ring.appendChild(bar);
+            }
+        }
+
         function initVoiceVisualizer() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -628,25 +660,34 @@
                 const source = audioCtx.createMediaElementSource(arenaSound);
                 source.connect(analyser);
                 analyser.connect(audioCtx.destination);
-                analyser.fftSize = 64; 
+                analyser.fftSize = 256; 
                 dataArray = new Uint8Array(analyser.frequencyBinCount);
             }
         }
 
         function runVisualizer() {
             analyser.getByteFrequencyData(dataArray);
-            const bars = document.querySelectorAll('.visualizer-bar');
+            const bars = document.querySelectorAll('.ring-bar');
             const progress = document.getElementById('voice-progress');
+            const logo = document.getElementById('center-logo-box');
             
-            // Map frequencies to bar heights
+            let sum = 0;
             bars.forEach((bar, index) => {
-                const val = dataArray[index] || 0;
-                const height = Math.max(2, (val / 255) * 60);
+                const dataIdx = Math.floor((index / BAR_COUNT) * dataArray.length * 0.4);
+                const val = dataArray[dataIdx] || 0;
+                sum += val;
+                const baseScale = (val / 255) * 65;
+                const height = 12 + baseScale;
+                
                 bar.style.height = `${height}px`;
-                bar.style.opacity = 0.3 + (val / 255);
+                bar.style.backgroundColor = `rgba(255, 255, 255, ${0.4 + (val / 255)})`;
+                bar.style.boxShadow = `0 0 ${val/12}px rgba(255,255,255,0.7)`;
             });
 
-            // Update loading bar based on current time
+            const avg = sum / BAR_COUNT;
+            const logoScale = 1 + (avg / 255) * 0.35;
+            logo.style.transform = `scale(${logoScale})`;
+
             const percent = (arenaSound.currentTime / arenaSound.duration) * 100;
             progress.style.width = `${percent}%`;
 
@@ -655,50 +696,19 @@
 
         const sponsorConfig = {
             "TITLE SPONSOR": [  
-                { 
-                    name: "ATHARVA SOLAR TECHNOLOGY", 
-                    logo: "sponsor/title/AST.png", 
-                    desc: "Renewable Energy Support",
-                    logoScale: 1.4, 
-                    boxGradient: "rgba(255, 255, 255, 0.05)"
-                }
-            ],
-            "GOLD PARTNER": [
-                /* {
-                    name: "RoboMasters Inc",
-                    logo: "sponsor/gold/robo.png",
-                    desc: "Technical Hardware Support",
-                    logoScale: 1.2
-                }*/
+                { name: "ATHARVA SOLAR TECHNOLOGY", logo: "sponsor/title/AST.png", desc: "Renewable Energy Support", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" }
             ],
             "SILVER PARTNER": [
-                { 
-                    name: "VKO Studio", 
-                    logo: "sponsor/silver/vkostudio.svg", 
-                    desc: "Designing Partner",
-                    logoScale: 1.4, 
-                    boxGradient: "rgba(255, 255, 255, 0.05)"
-                },
-                { 
-                    name: "Techredy IT Solution", 
-                    logo: "sponsor/silver/Techredy It Solution.png.png", 
-                    desc: "  ",
-                    logoScale: 1.4, 
-                    boxGradient: "rgba(255, 255, 255, 0.05)"
-                },
-                { 
-                    name: "Salunke Automation Pvt.Ltd.", 
-                    logo: "sponsor/silver/FINAL SALUNKE LOGO.png", 
-                    desc: "  ",
-                    logoScale: 1.4, 
-                    boxGradient: "rgba(255, 255, 255, 0.05)"
-                }
+                { name: "VKO Studio", logo: "sponsor/silver/vkostudio.svg", desc: "Designing Partner", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" },
+                { name: "Techredy IT Solution", logo: "sponsor/silver/Techredy It Solution.png.png", desc: "  ", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" },
+                { name: "Salunke Automation Pvt.Ltd.", logo: "sponsor/silver/FINAL SALUNKE LOGO.png", desc: "  ", logoScale: 1.4, boxGradient: "rgba(255, 255, 255, 0.05)" }
             ]
         };
 
         let motivationTimeline;
 
         document.addEventListener('DOMContentLoaded', () => {
+            createCircularVisualizer();
             const alphaVideo = document.getElementById('alpha-video');
             const introTimer = setTimeout(proceedToMotivation, 4500);
             alphaVideo.onended = () => { clearTimeout(introTimer); proceedToMotivation(); };
@@ -711,14 +721,7 @@
                     stage.style.display = 'block';
                     gsap.to(stage, { opacity: 1, duration: 1.5 });
                     
-                    motivationTimeline = gsap.timeline({
-                        onComplete: () => {
-                            gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
-                                document.getElementById("skip-cinematic-arrow").style.display = 'none';
-                            }});
-                        }
-                    });
-
+                    motivationTimeline = gsap.timeline();
                     ['#line-1', '#line-2', '#line-3'].forEach((id) => {
                         motivationTimeline.to(id, { opacity: 1, y: -10, duration: 0.8 })
                                           .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
@@ -746,23 +749,32 @@
             const motivation = document.getElementById('motivation-stage');
             const voiceStage = document.getElementById('voice-loading-stage');
 
-            // Hide Motivation
             gsap.to(motivation, { opacity: 0, duration: 0.8, onComplete: () => {
                 motivation.style.display = 'none';
-                
-                // Show Voice Analysis Loading
                 voiceStage.style.display = 'flex';
                 gsap.to(voiceStage, { opacity: 1, duration: 0.8 });
 
-                // Initialize Audio Context and Visualizer
                 initVoiceVisualizer();
-                arenaSound.play();
+                arenaSound.play().catch(e => console.log("Arena audio file missing or interaction blocked."));
                 runVisualizer();
 
-                // When audio ends, transition to cinematic
                 arenaSound.onended = () => {
                     cancelAnimationFrame(animationId);
-                    gsap.to(voiceStage, { opacity: 0, duration: 0.8, onComplete: () => {
+                    
+                    // High-end contraction effect
+                    const bars = document.querySelectorAll('.ring-bar');
+                    gsap.to(bars, { 
+                        y: 0, 
+                        scale: 0,
+                        opacity: 0, 
+                        duration: 0.7, 
+                        stagger: { each: 0.005, from: "center" },
+                        ease: "back.in(1.7)" 
+                    });
+                    
+                    gsap.to("#center-logo-box", { scale: 0, opacity: 0, duration: 0.6, delay: 0.4 });
+
+                    gsap.to(voiceStage, { opacity: 0, duration: 0.8, delay: 0.8, onComplete: () => {
                         voiceStage.style.display = 'none';
                         proceedToCinematic();
                     }});
@@ -828,33 +840,18 @@
             const modal = document.getElementById('sponsor-modal');
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden'; 
-            
-            gsap.to(modal, { 
-                opacity: 1, 
-                duration: 0.5, 
-                onComplete: () => {
-                    gsap.to(".sponsor-slide-item", {
-                        opacity: 1,
-                        x: 0,
-                        stagger: 0.1,
-                        duration: 0.6,
-                        ease: "power2.out"
-                    });
-                }
-            });
+            gsap.to(modal, { opacity: 1, duration: 0.5, onComplete: () => {
+                gsap.to(".sponsor-slide-item", { opacity: 1, x: 0, stagger: 0.1, duration: 0.6, ease: "power2.out" });
+            }});
         }
 
         function closeSponsorModal() {
             const modal = document.getElementById('sponsor-modal');
-            gsap.to(modal, { 
-                opacity: 0, 
-                duration: 0.4, 
-                onComplete: () => {
-                    modal.style.display = 'none';
-                    document.body.style.overflow = 'auto'; 
-                    gsap.set(".sponsor-slide-item", { opacity: 0, x: 80 }); 
-                } 
-            });
+            gsap.to(modal, { opacity: 0, duration: 0.4, onComplete: () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; 
+                gsap.set(".sponsor-slide-item", { opacity: 0, x: 80 }); 
+            }});
         }
 
         function initSponsorSystem() {
@@ -878,13 +875,7 @@
 
             dashboardContent.innerHTML = Object.entries(sponsorConfig).map(([tier, list]) => {
                 if (list.length === 0) return '';
-                
-                let tierClass = "tier-default";
-                const upperTier = tier.toUpperCase();
-                if (upperTier.includes("TITLE")) tierClass = "tier-title";
-                else if (upperTier.includes("GOLD")) tierClass = "tier-gold";
-                else if (upperTier.includes("SILVER")) tierClass = "tier-silver";
-
+                let tierClass = tier.toUpperCase().includes("TITLE") ? "tier-title" : "tier-default";
                 return `
                     <div class="space-y-8 sponsor-slide-item">
                         <div class="flex items-center gap-6">
@@ -894,9 +885,8 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             ${list.map(s => {
                                 const scale = s.logoScale || 1.0;
-                                const bg = s.boxGradient || 'linear-gradient(145deg, rgba(18,18,18,0.9), rgba(8,8,8,0.95))';
                                 return `
-                                <div class="matte-surface p-10 md:p-12 flex flex-col items-center gap-4 group hover:border-white/30 transition-all duration-500 cursor-default" style="background: ${bg};">
+                                <div class="matte-surface p-10 md:p-12 flex flex-col items-center gap-4 group hover:border-white/30 transition-all duration-500 cursor-default">
                                     <img src="${s.logo}" class="object-contain brightness-200 group-hover:scale-110 transition-transform duration-500" style="height: ${80 * scale}px;" onerror="this.src='https://via.placeholder.com/250x120/000000/FFFFFF?text=${s.name}'">
                                     <div class="text-center">
                                         <p class="font-space font-black text-sm tracking-[4px] group-hover:text-white transition-colors uppercase">${s.name}</p>
@@ -918,7 +908,6 @@
             dummy.select();
             document.execCommand("copy");
             document.body.removeChild(dummy);
-            
             const btn = document.querySelector('button[onclick="copyUPI()"]');
             btn.innerHTML = '<i class="fa-solid fa-check text-white"></i>';
             setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i>', 2000);
@@ -963,7 +952,6 @@
             const btn = document.getElementById('submit-btn');
             btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> TRANSMITTING...`;
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwoocXDvRhL5ItOydrLFTTOuu9utbbJ3d03cGhGpm6odYd4__LVWuk7N4GYDkYjPj3JsA/exec';
-            
             fetch(scriptURL, { method: 'POST', body: new FormData(this) })
                 .then(() => {
                     document.getElementById('success-team-name').innerText = document.getElementById('teamName').value;
@@ -976,8 +964,7 @@
                     const modal = document.getElementById('success-modal');
                     modal.classList.remove('pointer-events-none'); modal.style.opacity = '1';
                     document.getElementById('success-card').classList.replace('scale-95', 'scale-100');
-                    btn.disabled = false; 
-                    btn.innerHTML = "Secure My Spot"; 
+                    btn.disabled = false; btn.innerHTML = "Secure My Spot"; 
                 });
         });
     </script>
