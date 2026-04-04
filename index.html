@@ -93,7 +93,7 @@
         }
 
         /* --- Content Sections --- */
-        #intro-alpha, #motivation-stage, #transition-video-stage, #registration-portal {
+        #intro-alpha, #motivation-stage, #transition-video-stage, #registration-portal, #voice-loading-stage {
             position: fixed; inset: 0; display: none; opacity: 0;
             z-index: 10;
         }
@@ -188,6 +188,15 @@
             backdrop-filter: blur(15px); color: white; padding: 12px 28px; border-radius: 100px;
             font-size: 10px; letter-spacing: 3px; font-weight: 900; transition: 0.4s;
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Voice loading visualizer bars */
+        .visualizer-bar {
+            width: 6px;
+            background: #fff;
+            border-radius: 10px;
+            transition: height 0.05s ease;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
 
         /* Rule Panel Styles - DARK MIDNIGHT GLASS */
@@ -400,6 +409,23 @@
         </div>
     </div>
 
+    <!-- PHASE 2.2: VOICE SENSITIVE LOADING -->
+    <div id="voice-loading-stage" class="bg-black/95 backdrop-blur-3xl z-[1500] flex flex-col items-center justify-center">
+        <div id="visualizer-container" class="flex items-center gap-1 h-24 mb-10">
+            <!-- 20 bars for the frequency visualizer -->
+            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
+            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
+            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
+            <div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div><div class="visualizer-bar h-2"></div>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+            <span class="text-[9px] font-display font-black tracking-[6px] text-white uppercase flicker">Analyzing Vocal Auth</span>
+            <div class="w-32 h-[1px] bg-white/20 relative overflow-hidden">
+                <div id="voice-progress" class="absolute inset-y-0 left-0 bg-white w-0 transition-all duration-300"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- PHASE 2.5: CINEMATIC CLIP -->
     <div id="transition-video-stage">
         <div class="relative w-full h-full flex flex-col items-center justify-center">
@@ -591,21 +617,41 @@
     </div>
 
     <script>
-        // Feature: Audio sound play
+        // Audio & Voice Processing Logic
         const arenaSound = new Audio('Welcome to the arena.mp3');
-        let soundStarted = false;
-
-        // Force play sound on first user interaction (browser requirement)
-        const triggerInitialVoice = () => {
-            if (!soundStarted) {
-                arenaSound.play().then(() => {
-                    soundStarted = true;
-                }).catch(e => console.log("Waiting for user interaction..."));
+        let audioCtx, analyser, dataArray, animationId;
+        
+        function initVoiceVisualizer() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                const source = audioCtx.createMediaElementSource(arenaSound);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                analyser.fftSize = 64; 
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
             }
-        };
+        }
 
-        document.addEventListener('click', triggerInitialVoice, { once: true });
-        document.addEventListener('touchstart', triggerInitialVoice, { once: true });
+        function runVisualizer() {
+            analyser.getByteFrequencyData(dataArray);
+            const bars = document.querySelectorAll('.visualizer-bar');
+            const progress = document.getElementById('voice-progress');
+            
+            // Map frequencies to bar heights
+            bars.forEach((bar, index) => {
+                const val = dataArray[index] || 0;
+                const height = Math.max(2, (val / 255) * 60);
+                bar.style.height = `${height}px`;
+                bar.style.opacity = 0.3 + (val / 255);
+            });
+
+            // Update loading bar based on current time
+            const percent = (arenaSound.currentTime / arenaSound.duration) * 100;
+            progress.style.width = `${percent}%`;
+
+            animationId = requestAnimationFrame(runVisualizer);
+        }
 
         const sponsorConfig = {
             "TITLE SPONSOR": [  
@@ -653,9 +699,6 @@
         let motivationTimeline;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Attempt to play immediately (might be blocked by browser)
-            triggerInitialVoice();
-
             const alphaVideo = document.getElementById('alpha-video');
             const introTimer = setTimeout(proceedToMotivation, 4500);
             alphaVideo.onended = () => { clearTimeout(introTimer); proceedToMotivation(); };
@@ -701,28 +744,52 @@
 
         function startTransitionVideo() {
             const motivation = document.getElementById('motivation-stage');
+            const voiceStage = document.getElementById('voice-loading-stage');
+
+            // Hide Motivation
+            gsap.to(motivation, { opacity: 0, duration: 0.8, onComplete: () => {
+                motivation.style.display = 'none';
+                
+                // Show Voice Analysis Loading
+                voiceStage.style.display = 'flex';
+                gsap.to(voiceStage, { opacity: 1, duration: 0.8 });
+
+                // Initialize Audio Context and Visualizer
+                initVoiceVisualizer();
+                arenaSound.play();
+                runVisualizer();
+
+                // When audio ends, transition to cinematic
+                arenaSound.onended = () => {
+                    cancelAnimationFrame(animationId);
+                    gsap.to(voiceStage, { opacity: 0, duration: 0.8, onComplete: () => {
+                        voiceStage.style.display = 'none';
+                        proceedToCinematic();
+                    }});
+                };
+            }});
+        }
+
+        function proceedToCinematic() {
             const transStage = document.getElementById('transition-video-stage');
             const video = document.getElementById('trans-vid-asset');
             const loader = document.getElementById('cinematic-loader');
 
-            gsap.to(motivation, { opacity: 0, duration: 1, onComplete: () => {
-                motivation.style.display = 'none';
-                transStage.style.display = 'block';
-                gsap.to(transStage, { opacity: 1, duration: 1 });
+            transStage.style.display = 'block';
+            gsap.to(transStage, { opacity: 1, duration: 1 });
 
-                if(video.readyState >= 3) {
+            if(video.readyState >= 3) {
+                loader.style.display = 'none';
+                video.muted = false;
+                video.play();
+            } else {
+                video.addEventListener('canplaythrough', () => {
                     loader.style.display = 'none';
                     video.muted = false;
                     video.play();
-                } else {
-                    video.addEventListener('canplaythrough', () => {
-                        loader.style.display = 'none';
-                        video.muted = false;
-                        video.play();
-                    }, { once: true });
-                }
-                video.onended = showProceedButton;
-            }});
+                }, { once: true });
+            }
+            video.onended = showProceedButton;
         }
 
         function showProceedButton() {
