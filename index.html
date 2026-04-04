@@ -350,9 +350,37 @@
         
         .hardware-grid label { cursor: pointer; }
         .hardware-grid input:checked + .hardware-box { border-color: white; background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+
+        /* BGM Auto-Play Interaction Overlay */
+        #bgm-trigger {
+            position: fixed; inset: 0; z-index: 5000;
+            background: #000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 20px;
+        }
+        .pulse-button {
+            background: #fff; color: #000; font-family: 'Syncopate', sans-serif;
+            font-size: 10px; font-weight: 900; padding: 20px 40px;
+            border-radius: 100px; letter-spacing: 5px; text-transform: uppercase;
+            box-shadow: 0 0 30px rgba(255,255,255,0.3);
+            transition: 0.4s; cursor: pointer;
+        }
+        .pulse-button:hover { scale: 1.1; box-shadow: 0 0 50px rgba(255,255,255,0.6); }
+
     </style>
 </head>
 <body class="grain">
+
+    <!-- AUDIO ELEMENTS -->
+    <audio id="main-bgm" src="bgm.mp3" loop></audio>
+
+    <!-- INITIAL INTERACTION TRIGGER (Required for BGM AutoPlay) -->
+    <div id="bgm-trigger">
+        <div class="flex flex-col items-center gap-4 text-center px-6">
+            <p class="text-[8px] font-display tracking-[6px] opacity-40 uppercase mb-4">Remote Link Detected</p>
+            <h2 class="font-space text-2xl font-black italic tracking-widest text-white mb-2 uppercase">TRACK VERSE SYSTEM</h2>
+            <button onclick="initializeSystem()" class="pulse-button mt-4">Initialize Link</button>
+        </div>
+    </div>
 
     <svg style="display:none;">
         <filter id="noiseFilter">
@@ -376,7 +404,7 @@
     <!-- PHASE 1: LOADING CLIP -->
     <div id="intro-alpha">
         <div class="central-clip-container mb-8">
-            <video id="alpha-video" class="w-full h-full object-cover" autoplay muted playsinline>
+            <video id="alpha-video" class="w-full h-full object-cover" muted playsinline>
                 <source src="loadingclip.webm" type="video/webm">
             </video>
         </div>
@@ -606,12 +634,34 @@
     <script>
         // Audio & Circular Visualizer Logic
         const arenaSound = new Audio('Welcome to the arena.mp3');
+        const bgm = document.getElementById('main-bgm');
+
         let audioCtx, analyser, dataArray, animationId;
         const BAR_COUNT = 64; 
 
         // Dynamic Radius based on screen size
         function getRadius() {
             return Math.min(window.innerWidth * 0.28, 120);
+        }
+
+        // BGM Playback Helper (Triggered by user click)
+        function initializeSystem() {
+            // Play background music
+            bgm.play().catch(e => console.log("BGM Error:", e));
+            bgm.volume = 0.4;
+
+            // Fade out trigger overlay
+            gsap.to("#bgm-trigger", { opacity: 0, duration: 1, onComplete: () => {
+                document.getElementById('bgm-trigger').style.display = 'none';
+                
+                // Start the actual intro video
+                const alphaVideo = document.getElementById('alpha-video');
+                alphaVideo.play();
+
+                // Proceed to motivation timer
+                const introTimer = setTimeout(proceedToMotivation, 4500);
+                alphaVideo.onended = () => { clearTimeout(introTimer); proceedToMotivation(); };
+            }});
         }
 
         function createCircularVisualizer() {
@@ -679,33 +729,31 @@
 
         let motivationTimeline;
 
+        // Modified proceedToMotivation (made global so initializeSystem can see it)
+        function proceedToMotivation() {
+            const intro = document.getElementById('intro-alpha');
+            gsap.to(intro, { opacity: 0, duration: 1.2, onComplete: () => {
+                intro.style.display = 'none';
+                const stage = document.getElementById('motivation-stage');
+                stage.style.display = 'block';
+                gsap.to(stage, { opacity: 1, duration: 1.5 });
+                
+                motivationTimeline = gsap.timeline();
+                ['#line-1', '#line-2', '#line-3'].forEach((id) => {
+                    motivationTimeline.to(id, { opacity: 1, y: -10, duration: 0.8 })
+                                      .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
+                });
+                motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
+                    gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
+                        document.getElementById("skip-cinematic-arrow").style.display = 'none';
+                    }});
+                }});
+                motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
+            }});
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             createCircularVisualizer();
-            const alphaVideo = document.getElementById('alpha-video');
-            const introTimer = setTimeout(proceedToMotivation, 4500);
-            alphaVideo.onended = () => { clearTimeout(introTimer); proceedToMotivation(); };
-
-            function proceedToMotivation() {
-                const intro = document.getElementById('intro-alpha');
-                gsap.to(intro, { opacity: 0, duration: 1.2, onComplete: () => {
-                    intro.style.display = 'none';
-                    const stage = document.getElementById('motivation-stage');
-                    stage.style.display = 'block';
-                    gsap.to(stage, { opacity: 1, duration: 1.5 });
-                    
-                    motivationTimeline = gsap.timeline();
-                    ['#line-1', '#line-2', '#line-3'].forEach((id) => {
-                        motivationTimeline.to(id, { opacity: 1, y: -10, duration: 0.8 })
-                                          .to(id, { opacity: 0, y: -30, duration: 0.5, delay: 1.5 });
-                    });
-                    motivationTimeline.to("#workshop-cta", { opacity: 1, y: 0, duration: 1, onStart: () => {
-                        gsap.to("#skip-cinematic-arrow", { opacity: 0, pointerEvents: 'none', duration: 0.5, onComplete: () => {
-                            document.getElementById("skip-cinematic-arrow").style.display = 'none';
-                        }});
-                    }});
-                    motivationTimeline.to("#skip-cinematic-arrow", { opacity: 0.4, duration: 0.5 }, "-=6");
-                }});
-            }
         });
 
         function skipMotivationSequence() {
@@ -727,10 +775,16 @@
                 gsap.to(voiceStage, { opacity: 1, duration: 0.8 });
 
                 initVoiceVisualizer();
+                
+                // Dim BGM slightly while "Welcome to arena" plays
+                gsap.to(bgm, { volume: 0.1, duration: 0.5 });
                 arenaSound.play().catch(e => console.log("Arena audio error."));
                 runVisualizer();
 
                 arenaSound.onended = () => {
+                    // Bring BGM back up
+                    gsap.to(bgm, { volume: 0.4, duration: 1 });
+                    
                     cancelAnimationFrame(animationId);
                     const bars = document.querySelectorAll('.ring-bar');
                     gsap.to(bars, { 
